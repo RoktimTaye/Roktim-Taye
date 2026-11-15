@@ -17,11 +17,11 @@ export default function Hero() {
 
       {/* Background Image Layer (z-0: in front of bg color, behind text z-10) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Fullcover Photo */}
+        {/* Fullcover Photo - High Fidelity */}
         <img
           src="/images/hero-bg.jpg"
-          alt="Roktim Taye Background"
-          className="w-full h-full object-cover object-[center_35%] opacity-40 md:opacity-50 brightness-95 contrast-110"
+          alt="Roktim Taye"
+          className="w-full h-full object-cover object-[center_38%] opacity-70 md:opacity-80 contrast-[1.05]"
         />
 
         {/* Radial Vignette to darken corners and blend edges seamlessly */}
@@ -29,19 +29,19 @@ export default function Hero() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(17,16,16,0.55) 60%, #111010 88%)",
+              "radial-gradient(ellipse at 50% 45%, transparent 35%, rgba(17,16,16,0.5) 68%, #111010 92%)",
           }}
         />
 
         {/* Top Edge Blend into Header */}
-        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#111010] via-[#111010]/80 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#111010] via-[#111010]/75 to-transparent pointer-events-none" />
 
         {/* Bottom Edge Blend into Divider & Content */}
-        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#111010] via-[#111010]/90 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#111010] via-[#111010]/85 to-transparent pointer-events-none" />
 
         {/* Left & Right Edge Blends */}
-        <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#111010] to-transparent pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#111010] to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111010] to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111010] to-transparent pointer-events-none" />
       </div>
 
       {/* Top Eyebrow Metadata Grid (relative z-10) */}
