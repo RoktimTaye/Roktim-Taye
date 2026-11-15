@@ -22,6 +22,7 @@ export interface TextPressureProps {
   text?: string;
   fontFamily?: string;
   fontUrl?: string;
+  tag?: "h1" | "h2" | "h3" | "div" | "span";
   width?: boolean;
   weight?: boolean;
   italic?: boolean;
@@ -40,6 +41,7 @@ export default function TextPressure({
   text = "ROKTIM",
   fontFamily = "Roboto Flex, -apple-system, BlinkMacSystemFont, sans-serif",
   fontUrl = "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap",
+  tag = "h1",
   width = true,
   weight = true,
   italic = true,
@@ -258,16 +260,19 @@ export default function TextPressure({
     width: flex ? "100%" : "auto",
   };
 
+  const Component = tag;
+  const cursorClass = className.includes("cursor-") ? "" : "cursor-default";
+
   return (
     <div
       ref={containerRef}
-      className={`relative inline-flex items-center overflow-hidden cursor-default ${className}`}
+      className={`relative inline-flex items-center overflow-hidden ${cursorClass} ${className}`}
       style={{ width: flex ? "100%" : "auto", height: "100%" }}
     >
       <style>{`
         @import url('${fontUrl}');
       `}</style>
-      <h1 ref={titleRef} aria-label={text} style={titleStyle}>
+      <Component ref={titleRef} aria-label={text} style={titleStyle}>
         {chars.map((char, i) => (
           <span
             key={i}
@@ -284,10 +289,10 @@ export default function TextPressure({
                 "color 0.4s cubic-bezier(0.16, 1, 0.3, 1), font-variation-settings 0.25s ease-out",
             }}
           >
-            {char}
+            {char === " " ? "\u00A0" : char}
           </span>
         ))}
-      </h1>
+      </Component>
     </div>
   );
 }

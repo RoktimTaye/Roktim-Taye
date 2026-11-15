@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import TextPressure from "@/components/ui/TextPressure";
 
 export default function Footer() {
   const [time, setTime] = useState("");
@@ -37,18 +38,29 @@ export default function Footer() {
           <span className="eyebrow eyebrow--accent">Got something in mind?</span>
         </div>
 
-        {/* Massive LET'S TALK Kinetic Link */}
-        <div className="my-8 sm:my-14 overflow-hidden">
+        {/* Massive LET'S TALK Kinetic Link with TextPressure (arrow removed) */}
+        <div className="my-8 sm:my-16 w-full">
           <a
             href={`mailto:${email}`}
-            className="group block text-[clamp(48px,13.5vw,190px)] font-black tracking-[-0.03em] uppercase leading-[0.88] text-text hover:text-accent transition-colors duration-300"
+            aria-label="Let's Talk - Email Roktim Taye"
+            className="group block w-full h-[clamp(90px,16vw,250px)] relative flex items-center justify-start overflow-hidden cursor-pointer"
           >
-            <span className="inline-block transition-transform duration-300 group-hover:-translate-y-1">
-              LET&apos;S TALK
-            </span>
-            <span className="inline-block text-accent ml-2 sm:ml-4 text-[0.7em] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              →
-            </span>
+            <TextPressure
+              text="LET'S TALK"
+              tag="h2"
+              flex={false}
+              letterSpacing="0.045em"
+              gap="0.045em"
+              weight={true}
+              width={true}
+              italic={true}
+              radius={0.25}
+              smoothing={0.35}
+              textColor="#edeae4"
+              pressureColor="#7fa8ff"
+              minFontSize={44}
+              className="cursor-pointer"
+            />
           </a>
         </div>
 
