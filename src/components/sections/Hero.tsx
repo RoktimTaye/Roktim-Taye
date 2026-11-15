@@ -90,10 +90,10 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-6 pt-6 border-t border-hairline"
+        className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-6 pt-6"
       >
         {/* Intro */}
-        <p className="max-w-[36ch] text-[clamp(16px,1.5vw,21px)] text-muted font-light leading-[1.4] m-0">
+        <p className="max-w-[36ch] text-[clamp(16px,1.5vw,21px)] text-text font-bold leading-[1.4] m-0">
           I design and build websites and apps with a lot of movement in them. Startups, small businesses and fellow creators, mostly.
         </p>
 
