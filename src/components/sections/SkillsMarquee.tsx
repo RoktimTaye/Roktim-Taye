@@ -66,8 +66,8 @@ export default function SkillsMarquee() {
   });
 
   return (
-    // Top border removed (only border-b retained), larger vertical scale
-    <div className="w-full border-b border-hairline bg-surface/40 py-8 sm:py-10 md:py-12 overflow-hidden select-none relative">
+    // Top border removed (only border-b retained), background #111010
+    <div className="w-full border-b border-hairline bg-[#111010] py-8 sm:py-10 md:py-12 overflow-hidden select-none relative">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,400;1,500&display=swap');
 
@@ -90,7 +90,7 @@ export default function SkillsMarquee() {
                 <span className="archivo-italic-medium text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4.2rem] text-text tracking-tight hover:text-accent transition-colors duration-200">
                   {item}
                 </span>
-                <span className="w-3 h-3 sm:w-4 sm:h-4 rotate-45 bg-accent inline-block shrink-0 shadow-[0_0_14px_rgba(127,168,255,0.7)]" />
+                <span className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rotate-45 bg-accent inline-block shrink-0" />
               </div>
             ))}
           </div>
