@@ -58,10 +58,10 @@ export default function ServiceTiles() {
   };
 
   return (
-    <section id="services" className="py-[clamp(60px,10vh,120px)] px-[clamp(20px,4vw,56px)] bg-bg border-t border-hairline select-none">
+    <section id="services" className="py-[clamp(50px,8vh,90px)] px-[clamp(20px,4vw,56px)] bg-bg border-t border-hairline select-none">
       <div className="max-w-[1600px] mx-auto">
         {/* Section Head */}
-        <div className="flex items-center justify-between pb-8 mb-6 border-b border-hairline">
+        <div className="flex items-center justify-between pb-6 mb-4 border-b border-hairline">
           <h2 className="eyebrow eyebrow--accent">
             (What I do)
           </h2>
@@ -74,7 +74,7 @@ export default function ServiceTiles() {
           </a>
         </div>
 
-        {/* 4-Column Service Grid with vertical slide fill & magnetic OPEN badge */}
+        {/* 4-Column Low-Height Wide Rectangle Grid with vertically centered text */}
         <div
           ref={gridRef}
           onMouseMove={handleMouseMove}
@@ -84,7 +84,7 @@ export default function ServiceTiles() {
         >
           {/* Floating Magnetic "OPEN" Circle Badge */}
           <motion.div
-            className="pointer-events-none absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-[#111010] border border-white/20 shadow-2xl flex items-center justify-center z-30"
+            className="pointer-events-none absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#111010] border border-white/20 shadow-2xl flex items-center justify-center z-30"
             style={{
               x: badgeX,
               y: badgeY,
@@ -96,7 +96,7 @@ export default function ServiceTiles() {
             }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="text-[11px] font-mono tracking-widest text-white uppercase font-medium">
+            <span className="text-[10px] font-mono tracking-widest text-white uppercase font-medium">
               OPEN
             </span>
           </motion.div>
@@ -109,7 +109,7 @@ export default function ServiceTiles() {
                 key={svc.num}
                 href="#contact"
                 onMouseEnter={() => setHoveredIdx(idx)}
-                className="group relative flex flex-col justify-between h-[360px] sm:h-[400px] lg:h-[460px] p-8 sm:p-10 overflow-hidden cursor-pointer"
+                className="group relative flex flex-col justify-center h-[clamp(200px,22vw,240px)] px-7 sm:px-9 py-6 overflow-hidden cursor-pointer"
               >
                 {/* Sliding Blue Fill Layer (slides IN from bottom, slides OUT to top) */}
                 <AnimatePresence>
@@ -128,39 +128,41 @@ export default function ServiceTiles() {
                   )}
                 </AnimatePresence>
 
-                {/* Top Row: Number & Arrow (↗ transforms to → on hover) */}
-                <div className="relative z-10 flex items-center justify-between">
-                  <span
-                    className={`font-mono text-xs tracking-wider transition-colors duration-300 ${
-                      isHovered ? "text-[#111010] font-semibold" : "text-[#7fa8ff]"
-                    }`}
-                  >
-                    {svc.num}
-                  </span>
+                {/* Vertically Centered Content Stack */}
+                <div className="relative z-10 flex flex-col justify-center">
+                  {/* Top Row: Number & Arrow (↗ transforms to → on hover) */}
+                  <div className="flex items-center justify-between mb-3">
+                    <span
+                      className={`font-mono text-xs tracking-wider transition-colors duration-300 ${
+                        isHovered ? "text-[#111010] font-semibold" : "text-[#7fa8ff]"
+                      }`}
+                    >
+                      {svc.num}
+                    </span>
 
-                  <span
-                    className={`font-mono text-sm transition-all duration-300 inline-block ${
-                      isHovered
-                        ? "text-[#111010] translate-x-0.5"
-                        : "text-[#7fa8ff]"
-                    }`}
-                  >
-                    {isHovered ? "→" : "↗"}
-                  </span>
-                </div>
+                    <span
+                      className={`font-mono text-sm transition-all duration-300 inline-block ${
+                        isHovered
+                          ? "text-[#111010] translate-x-0.5"
+                          : "text-[#7fa8ff]"
+                      }`}
+                    >
+                      {isHovered ? "→" : "↗"}
+                    </span>
+                  </div>
 
-                {/* Bottom Row: Title & Description */}
-                <div className="relative z-10">
+                  {/* Title */}
                   <h3
-                    className={`text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight leading-[1] mb-4 transition-colors duration-300 ${
+                    className={`text-2xl sm:text-3xl lg:text-[2rem] font-bold tracking-tight leading-tight mb-2 transition-colors duration-300 ${
                       isHovered ? "text-[#111010]" : "text-text"
                     }`}
                   >
                     {svc.title}
                   </h3>
 
+                  {/* Description */}
                   <p
-                    className={`text-xs sm:text-sm leading-relaxed transition-colors duration-300 ${
+                    className={`text-xs sm:text-[13px] leading-relaxed transition-colors duration-300 line-clamp-2 ${
                       isHovered ? "text-[#111010]/85 font-normal" : "text-muted font-light"
                     }`}
                   >
