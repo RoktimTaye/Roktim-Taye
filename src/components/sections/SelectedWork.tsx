@@ -9,12 +9,22 @@ export default function SelectedWork() {
   const [activeProject, setActiveProject] = useState(projects[0]);
 
   return (
-    <section id="work" className="py-[clamp(80px,14vh,160px)] px-[clamp(20px,4vw,56px)] bg-bg">
+    <section id="work" className="py-[clamp(80px,14vh,160px)] px-[clamp(20px,4vw,56px)] bg-bg select-none">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap');
+
+        .font-variable-title {
+          font-family: 'Roboto Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+          will-change: font-variation-settings, color;
+        }
+      `}</style>
+
       <div className="max-w-[1600px] mx-auto">
         {/* Section Head */}
         <div className="flex items-center justify-between pb-8 border-b border-hairline mb-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <span className="eyebrow eyebrow--accent">(Selected work)</span>
+            <span className="eyebrow text-accent">(0{projects.length})</span>
           </div>
           <span className="eyebrow text-label">2024 — 2026</span>
         </div>
@@ -25,39 +35,58 @@ export default function SelectedWork() {
           <div className="lg:col-span-7 flex flex-col">
             {projects.map((project, idx) => {
               const isSelected = activeProject.id === project.id;
-              const formattedNum = `(0${idx + 1})`;
+              const formattedNum = `0${idx + 1}`;
 
               return (
                 <div
                   key={project.id}
                   onMouseEnter={() => setActiveProject(project)}
-                  className={`group relative box-border border-b border-hairline transition-all duration-500 py-[clamp(28px,4vw,48px)] cursor-pointer ${
-                    isSelected ? "lg:pl-6 text-accent" : "text-text hover:text-accent lg:hover:pl-4"
+                  className={`group relative box-border border-b border-hairline py-[clamp(28px,4vw,48px)] cursor-pointer transition-all duration-500 ${
+                    isSelected ? "lg:pl-3" : "hover:lg:pl-2"
                   }`}
                 >
                   <Link href={`/projects/${project.slug}`} className="block">
-                    {/* Top row: Num, Title, Year */}
-                    <div className="flex items-baseline justify-between gap-4">
-                      <span className="font-mono text-xs text-label group-hover:text-accent transition-colors">
+                    {/* Top row: Num & Variable Font Title */}
+                    <div className="flex items-baseline gap-4 sm:gap-6">
+                      <span
+                        className={`font-mono text-xs tracking-wider transition-colors duration-300 w-6 shrink-0 ${
+                          isSelected ? "text-accent font-semibold" : "text-label"
+                        }`}
+                      >
                         {formattedNum}
                       </span>
-                      <h2 className="flex-1 text-[clamp(28px,4.5vw,78px)] font-black tracking-tight leading-[0.92] uppercase transition-colors">
+
+                      <h2
+                        className={`font-variable-title flex-1 text-[clamp(34px,5.2vw,86px)] tracking-[-0.01em] leading-[0.98] transition-all duration-500 ${
+                          isSelected ? "text-accent" : "text-[#7a756f] group-hover:text-text"
+                        }`}
+                        style={{
+                          fontVariationSettings: isSelected
+                            ? "'wdth' 142, 'wght' 450"
+                            : "'wdth' 55, 'wght' 850",
+                        }}
+                      >
                         {project.title}
                       </h2>
-                      <span className="font-mono text-xs text-label">
-                        {project.year}
-                      </span>
                     </div>
 
-                    {/* Meta row: Category, Tagline, Arrow */}
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono uppercase tracking-wider text-label pl-0 sm:pl-8">
+                    {/* Meta row: Category, Role, Case Study link */}
+                    <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3 text-xs font-mono uppercase tracking-wider pl-10 sm:pl-12">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="text-muted">{project.category}</span>
-                        <span>•</span>
-                        <span className="text-accent">{project.role}</span>
+                        <span className={isSelected ? "text-text/80" : "text-muted"}>
+                          {project.category}
+                        </span>
+                        <span className="text-muted/40">•</span>
+                        <span className={isSelected ? "text-accent" : "text-muted"}>
+                          {project.role}
+                        </span>
                       </div>
 
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-text">
+                      <div
+                        className={`flex items-center gap-1 transition-opacity duration-300 ${
+                          isSelected ? "opacity-100 text-accent" : "opacity-0 group-hover:opacity-100 text-text"
+                        }`}
+                      >
                         <span>Case study</span>
                         <ArrowUpRight size={14} />
                       </div>
