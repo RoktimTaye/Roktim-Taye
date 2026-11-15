@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import {
   motion,
   useScroll,
@@ -34,36 +33,38 @@ export default function SkillsMarquee() {
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
 
-  // Smooth out scroll velocity with spring physics
+  // Smooth scroll velocity tracking with gentle spring damping
   const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 40,
-    stiffness: 300,
+    damping: 50,
+    stiffness: 250,
   });
 
-  // Transform velocity into an acceleration multiplier
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 4.5], {
-    clamp: false,
+  // Velocity factor clamped to a subtle, gentle boost
+  const velocityFactor = useTransform(smoothVelocity, [0, 800], [0, 1.8], {
+    clamp: true,
   });
 
-  // Base ambient speed
-  const baseVelocity = -1.2;
-  const directionFactor = useRef<number>(1);
+  // Calm default baseline speed (equivalent to smooth 25s continuous loop)
+  const baseVelocity = -1.8; // % per second
 
-  // Map baseX to percentage loop (-50% to 0% for 4 repetitions)
+  // Map baseX to percentage loop (-50% to 0% for continuous loop)
   const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
 
   useAnimationFrame((t, delta) => {
-    // Delta in seconds
     const dt = delta / 1000;
+
+    // Gentle base drift
     let moveBy = baseVelocity * dt;
 
-    // Scroll acceleration: speed increases dynamically with scroll velocity
-    const currentVelocity = velocityFactor.get();
-    if (Math.abs(currentVelocity) > 0.05) {
-      moveBy += Math.sign(baseVelocity) * Math.abs(currentVelocity) * 2.8 * dt;
+    // When scrolling up/down, add a subtle, controlled speed boost
+    const currentVelocity = Math.abs(velocityFactor.get());
+    if (currentVelocity > 0.02) {
+      // Gentle boost: adds a little bit of speed during active scrolling
+      const boost = Math.min(currentVelocity * 1.6, 2.5);
+      moveBy += Math.sign(baseVelocity) * boost * dt;
     }
 
-    baseX.set(baseX.get() + moveBy * 8);
+    baseX.set(baseX.get() + moveBy);
   });
 
   return (
@@ -78,7 +79,7 @@ export default function SkillsMarquee() {
         }
       `}</style>
 
-      {/* Marquee Track with Scroll Acceleration */}
+      {/* Marquee Track with Gentle Base Drift & Subtle Scroll Boost */}
       <motion.div
         style={{ x }}
         className="flex w-max will-change-transform"
