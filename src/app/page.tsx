@@ -7,7 +7,7 @@ import ServiceTiles from "@/components/sections/ServiceTiles";
 
 export default function Home() {
   return (
-    <div className="relative overflow-x-hidden bg-bg">
+    <div className="relative overflow-x-clip bg-bg">
       <Hero />
       <SkillsMarquee />
       <SelectedWork />
