@@ -9,9 +9,9 @@ export default function Hero() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;700;800;900&display=swap');
 
-        .archivo-thin {
+        .archivo-extralight {
           font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 100;
+          font-weight: 200;
         }
       `}</style>
 
@@ -101,8 +101,8 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-6 pt-6"
       >
-        {/* Intro in Archivo Thin 100 */}
-        <p className="archivo-thin max-w-[36ch] text-[clamp(17px,1.6vw,22px)] text-text leading-[1.4] m-0 tracking-wide">
+        {/* Intro in Archivo ExtraLight 200 */}
+        <p className="archivo-extralight max-w-[36ch] text-[clamp(17px,1.6vw,22px)] text-text leading-[1.4] m-0 tracking-wide">
           I design and build websites and apps with a lot of movement in them. Startups, small businesses and fellow creators, mostly.
         </p>
 
