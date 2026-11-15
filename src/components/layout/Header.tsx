@@ -74,23 +74,23 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Center: Navigation Links */}
+          {/* Center: Navigation Links (hover #7FA8FF) */}
           <nav className="hidden md:flex items-center gap-8 text-xs tracking-wider uppercase font-mono text-muted">
             <a
               href="#work"
-              className="hover:text-text hover:text-accent transition-colors duration-200"
+              className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               Work
             </a>
             <a
               href="#about"
-              className="hover:text-text hover:text-accent transition-colors duration-200"
+              className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               About
             </a>
             <a
               href="#services"
-              className="hover:text-text hover:text-accent transition-colors duration-200"
+              className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               Services
             </a>
@@ -108,13 +108,13 @@ export default function Header() {
               <span>Dibrugarh {time || "IST"}</span>
             </div>
 
-            {/* Apple-style Glass Action Pill */}
+            {/* Contact Action Pill (bg #7FA8FF, text #111010) */}
             <a
               href="#contact"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-mono uppercase tracking-wider text-text bg-white/10 hover:bg-accent hover:text-black border border-white/15 hover:border-accent rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-mono uppercase tracking-wider text-[#111010] font-semibold bg-[#7fa8ff] hover:bg-[#9bbaff] border border-[#7fa8ff] rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-md shadow-[#7fa8ff]/25"
             >
               <span>Contact</span>
-              <ArrowUpRight size={13} />
+              <ArrowUpRight size={13} className="text-[#111010]" />
             </a>
           </div>
 

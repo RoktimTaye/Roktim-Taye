@@ -11,11 +11,11 @@ export default function SelectedWork() {
   return (
     <section id="work" className="py-[clamp(80px,14vh,160px)] px-[clamp(20px,4vw,56px)] bg-bg select-none">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-        .font-variable-title {
-          font-family: 'Roboto Flex', -apple-system, BlinkMacSystemFont, sans-serif;
-          will-change: font-variation-settings, color;
+        .font-work-title {
+          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+          transition: font-weight 0.35s ease, color 0.35s ease;
         }
       `}</style>
 
@@ -57,13 +57,11 @@ export default function SelectedWork() {
                       </span>
 
                       <h2
-                        className={`font-variable-title flex-1 text-[clamp(34px,5.2vw,86px)] tracking-[-0.01em] leading-[0.98] transition-all duration-500 ${
+                        className={`font-work-title flex-1 text-[clamp(34px,5.2vw,86px)] tracking-tight leading-[0.98] transition-all duration-300 ${
                           isSelected ? "text-accent" : "text-[#7a756f] group-hover:text-text"
                         }`}
                         style={{
-                          fontVariationSettings: isSelected
-                            ? "'wdth' 142, 'wght' 450"
-                            : "'wdth' 55, 'wght' 850",
+                          fontWeight: isSelected ? 500 : 700,
                         }}
                       >
                         {project.title}
