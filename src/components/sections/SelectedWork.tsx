@@ -28,8 +28,12 @@ export default function SelectedWork() {
         {/* Section Head */}
         <div className="flex items-center justify-between pb-8 border-b border-hairline mb-4">
           <div className="flex items-center gap-2">
-            <span className="eyebrow eyebrow--accent">(Selected work)</span>
-            <span className="eyebrow text-accent">(0{projects.length})</span>
+            <span className="font-mono text-accent text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
+              (Selected work)
+            </span>
+            <span className="font-mono text-accent text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
+              (0{projects.length})
+            </span>
           </div>
           <span className="eyebrow text-label">2024 — 2026</span>
         </div>

@@ -237,7 +237,7 @@ export default function Statement() {
         <div className="w-full flex flex-col justify-center">
           {/* Eyebrow */}
           <div className="mb-8 md:mb-12">
-            <span className="font-mono text-white text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
+            <span className="font-mono text-accent text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
               (Hello)
             </span>
           </div>

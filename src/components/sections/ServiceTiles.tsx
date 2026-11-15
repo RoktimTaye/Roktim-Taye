@@ -59,6 +59,19 @@ export default function ServiceTiles() {
 
   return (
     <section id="services" className="py-[clamp(50px,8vh,90px)] px-[clamp(20px,4vw,56px)] bg-bg border-t border-hairline select-none">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap');
+
+        .font-service-title {
+          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+          transform-origin: left center;
+          transition: font-variation-settings 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      font-weight 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      letter-spacing 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      color 0.35s ease;
+        }
+      `}</style>
       <div className="w-full">
         {/* Section Head */}
         <div className="flex items-center justify-between pb-6 mb-4 border-b border-hairline">
@@ -151,11 +164,19 @@ export default function ServiceTiles() {
                     </span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title with exact Selected Work font transformation animation */}
                   <h3
-                    className={`text-2xl sm:text-3xl lg:text-[2rem] font-bold tracking-tight leading-tight mb-2 transition-colors duration-300 ${
+                    className={`font-service-title text-2xl sm:text-3xl lg:text-[2.1rem] leading-tight mb-2 ${
                       isHovered ? "text-[#111010]" : "text-text"
                     }`}
+                    style={{
+                      fontWeight: isHovered ? 500 : 700,
+                      fontVariationSettings: isHovered
+                        ? "'wdth' 116, 'wght' 500"
+                        : "'wdth' 94, 'wght' 700",
+                      letterSpacing: isHovered ? "0.03em" : "-0.015em",
+                      transform: isHovered ? "scale(1.025)" : "scale(1)",
+                    }}
                   >
                     {svc.title}
                   </h3>
