@@ -26,6 +26,7 @@ export interface TextPressureProps {
   weight?: boolean;
   italic?: boolean;
   flex?: boolean;
+  letterSpacing?: string;
   radius?: number;
   smoothing?: number;
   textColor?: string;
@@ -41,8 +42,9 @@ export default function TextPressure({
   width = true,
   weight = true,
   italic = true,
-  flex = true,
-  radius = 0.25,
+  flex = false,
+  letterSpacing = "-0.03em",
+  radius = 0.22,
   smoothing = 0.35,
   textColor = "#edeae4",
   pressureColor = "#7fa8ff",
@@ -64,7 +66,7 @@ export default function TextPressure({
   const [fontSize, setFontSize] = useState(minFontSize);
   const chars = Array.from(text);
 
-  // Resize calculation that respects both container width and container height
+  // Resize calculation: compute font size proportionally to height and width
   useIsomorphicLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -73,9 +75,11 @@ export default function TextPressure({
       const { width: containerW, height: containerH } = container.getBoundingClientRect();
       if (!containerW || !containerH) return;
 
-      // Font size must comfortably fit both width and height to prevent vertical collisions
-      const fontFromHeight = containerH * 0.88;
-      const fontFromWidth = containerW / (chars.length * 0.62);
+      const fontFromHeight = containerH * 0.92;
+      const fontFromWidth = flex
+        ? containerW / (chars.length * 0.62)
+        : containerW / (chars.length * 0.52);
+
       const calculatedFontSize = Math.max(
         Math.min(fontFromWidth, fontFromHeight),
         minFontSize
@@ -88,9 +92,9 @@ export default function TextPressure({
     const observer = new ResizeObserver(resize);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [chars.length, minFontSize]);
+  }, [chars.length, minFontSize, flex]);
 
-  // Pointer tracking ONLY on the container/letters
+  // Pointer tracking ONLY on the container / letters
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -129,7 +133,7 @@ export default function TextPressure({
     };
   }, []);
 
-  // Animation Loop: Reacts ONLY when cursor is inside
+  // Animation Loop: Reacts ONLY when cursor is hovering over the letters
   useEffect(() => {
     const title = titleRef.current;
     if (!title) return;
@@ -147,13 +151,12 @@ export default function TextPressure({
       const mouse = mouseRef.current;
       const cursor = cursorRef.current;
 
-      // Smooth cursor follow
       const follow = 1 - Math.exp(-elapsed / (1000 * smoothing * smoothing));
       mouse.x += (cursor.x - mouse.x) * follow;
       mouse.y += (cursor.y - mouse.y) * follow;
 
       const titleRect = title.getBoundingClientRect();
-      const maxDist = Math.max(titleRect.width * radius, 120);
+      const maxDist = Math.max(titleRect.width * radius, 110);
 
       const spans = spansRef.current;
       const centers = spans.map((span) => {
@@ -168,7 +171,6 @@ export default function TextPressure({
         const center = centers[i];
         if (!span || !center) return;
 
-        // ONLY apply pressure when cursor is hovering over the letters!
         let pressure = 0;
         if (cursor.inside) {
           const distance = dist(mouse, center);
@@ -179,10 +181,9 @@ export default function TextPressure({
           hasActivePressure = true;
         }
 
-        // Variable font values: resting state = 800 weight, 100 width, 0 italic
-        const wdth = width ? Math.floor(100 + 45 * pressure) : 100;
+        const wdth = width ? Math.floor(100 + 40 * pressure) : 100;
         const wght = weight ? Math.floor(750 + 250 * pressure) : 800;
-        const italVal = italic ? (pressure * 0.8).toFixed(2) : "0";
+        const italVal = italic ? (pressure * 0.7).toFixed(2) : "0";
         const color = pressure > 0.15 && pressureColor ? pressureColor : textColor;
 
         const settings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
@@ -199,8 +200,7 @@ export default function TextPressure({
         }
       });
 
-      // Keep rendering until letters return to resting state smoothly
-      if (cursor.inside || hasActivePressure || settlingFrames < 30) {
+      if (cursor.inside || hasActivePressure || settlingFrames < 25) {
         if (!cursor.inside && !hasActivePressure) {
           settlingFrames++;
         } else {
@@ -230,20 +230,22 @@ export default function TextPressure({
     textTransform: "uppercase",
     fontSize,
     lineHeight: 1,
+    letterSpacing,
     margin: 0,
     userSelect: "none",
     whiteSpace: "nowrap",
-    width: "100%",
     color: textColor,
     display: flex ? "flex" : "inline-flex",
     justifyContent: flex ? "space-between" : "flex-start",
     alignItems: "center",
+    width: flex ? "100%" : "auto",
   };
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full flex items-center overflow-hidden cursor-default ${className}`}
+      className={`relative inline-flex items-center overflow-hidden cursor-default ${className}`}
+      style={{ width: flex ? "100%" : "auto", height: "100%" }}
     >
       <style>{`
         @import url('${fontUrl}');

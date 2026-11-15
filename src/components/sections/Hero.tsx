@@ -19,40 +19,40 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Hero Name Container with Distinct Vertical Spacing */}
-      <div className="flex flex-col justify-center flex-auto my-[clamp(24px,4vh,48px)]">
-        {/* Line 1: ROKTIM */}
-        <div className="w-full h-[clamp(75px,12vw,170px)] relative flex items-center">
+      {/* Hero Name Container with Tight Character Spacing & Distinct Rows */}
+      <div className="flex flex-col justify-center flex-auto my-[clamp(20px,3.5vh,44px)]">
+        {/* Line 1: ROKTIM (Tightly spaced wordmark) */}
+        <div className="w-full h-[clamp(75px,12.5vw,175px)] relative flex items-center justify-start overflow-hidden">
           <TextPressure
             text="ROKTIM"
-            flex={true}
+            flex={false}
+            letterSpacing="-0.035em"
             weight={true}
             width={true}
             italic={true}
-            radius={0.22}
+            radius={0.25}
             smoothing={0.35}
             textColor="#edeae4"
             pressureColor="#7fa8ff"
-            minFontSize={42}
+            minFontSize={48}
           />
         </div>
 
-        {/* Line 2: TAYE (Right-Aligned, Zero Overlap) */}
-        <div className="w-full flex justify-end mt-4 sm:mt-6">
-          <div className="w-full sm:w-[60%] md:w-[50%] h-[clamp(75px,12vw,170px)] relative flex items-center justify-end">
-            <TextPressure
-              text="TAYE"
-              flex={true}
-              weight={true}
-              width={true}
-              italic={true}
-              radius={0.25}
-              smoothing={0.35}
-              textColor="#edeae4"
-              pressureColor="#7fa8ff"
-              minFontSize={42}
-            />
-          </div>
+        {/* Line 2: TAYE (Right-Aligned, Tightly spaced wordmark) */}
+        <div className="w-full h-[clamp(75px,12.5vw,175px)] relative flex items-center justify-end mt-3 sm:mt-5 overflow-hidden">
+          <TextPressure
+            text="TAYE"
+            flex={false}
+            letterSpacing="-0.035em"
+            weight={true}
+            width={true}
+            italic={true}
+            radius={0.25}
+            smoothing={0.35}
+            textColor="#edeae4"
+            pressureColor="#7fa8ff"
+            minFontSize={48}
+          />
         </div>
       </div>
 
