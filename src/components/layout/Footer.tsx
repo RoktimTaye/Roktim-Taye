@@ -32,7 +32,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="bg-bg text-text pt-24 sm:pt-36 pb-12 px-[clamp(20px,4vw,56px)] border-t border-hairline select-none">
-      <div className="max-w-[1600px] mx-auto flex flex-col justify-between">
+      <div className="w-full flex flex-col justify-between">
         {/* Eyebrow Label (Increased size by 2, text color white) */}
         <div className="mb-6 sm:mb-8">
           <span className="font-mono text-white text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">

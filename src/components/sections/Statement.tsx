@@ -234,7 +234,7 @@ export default function Statement() {
       className="relative h-[220vh] bg-bg border-t border-hairline"
     >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center px-[clamp(20px,4vw,56px)] overflow-hidden">
-        <div className="max-w-[1400px] mx-auto w-full flex flex-col justify-center">
+        <div className="w-full flex flex-col justify-center">
           {/* Eyebrow */}
           <div className="mb-8 md:mb-12">
             <span className="eyebrow eyebrow--accent">(Hello)</span>

@@ -59,7 +59,7 @@ export default function ServiceTiles() {
 
   return (
     <section id="services" className="py-[clamp(50px,8vh,90px)] px-[clamp(20px,4vw,56px)] bg-bg border-t border-hairline select-none">
-      <div className="max-w-[1600px] mx-auto">
+      <div className="w-full">
         {/* Section Head */}
         <div className="flex items-center justify-between pb-6 mb-4 border-b border-hairline">
           <h2 className="eyebrow eyebrow--accent">

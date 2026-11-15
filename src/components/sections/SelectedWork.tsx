@@ -24,7 +24,7 @@ export default function SelectedWork() {
         }
       `}</style>
 
-      <div className="max-w-[1600px] mx-auto">
+      <div className="w-full">
         {/* Section Head */}
         <div className="flex items-center justify-between pb-8 border-b border-hairline mb-4">
           <div className="flex items-center gap-2">

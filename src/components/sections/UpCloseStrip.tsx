@@ -55,7 +55,7 @@ export default function UpCloseStrip() {
   return (
     <section className="py-[clamp(60px,10vh,120px)] bg-bg overflow-hidden border-t border-hairline">
       {/* Head */}
-      <div className="max-w-[1600px] mx-auto px-[clamp(20px,4vw,56px)] flex items-center justify-between mb-8">
+      <div className="w-full px-[clamp(20px,4vw,56px)] flex items-center justify-between mb-8">
         <span className="eyebrow eyebrow--accent">(Up close)</span>
         <span className="eyebrow text-label">Drag or scroll →</span>
       </div>
