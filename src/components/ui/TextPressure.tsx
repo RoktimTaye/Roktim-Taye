@@ -43,7 +43,7 @@ export default function TextPressure({
   weight = true,
   italic = true,
   flex = false,
-  letterSpacing = "-0.03em",
+  letterSpacing = "-0.035em",
   radius = 0.22,
   smoothing = 0.35,
   textColor = "#edeae4",
@@ -63,8 +63,16 @@ export default function TextPressure({
     inside: false,
   });
 
+  // Keep a continuous per-character pressure array for buttery-smooth ease in and ease out
+  const currentPressuresRef = useRef<number[]>([]);
+
   const [fontSize, setFontSize] = useState(minFontSize);
   const chars = Array.from(text);
+
+  // Initialize continuous pressure states for each character
+  if (currentPressuresRef.current.length !== chars.length) {
+    currentPressuresRef.current = new Array(chars.length).fill(0);
+  }
 
   // Resize calculation: compute font size proportionally to height and width
   useIsomorphicLayoutEffect(() => {
@@ -133,7 +141,7 @@ export default function TextPressure({
     };
   }, []);
 
-  // Animation Loop: Reacts ONLY when cursor is hovering over the letters
+  // Animation Loop with continuous spring-decay interpolation on release
   useEffect(() => {
     const title = titleRef.current;
     if (!title) return;
@@ -141,7 +149,6 @@ export default function TextPressure({
     const applied: any[] = [];
     let rafId = 0;
     let last = 0;
-    let settlingFrames = 0;
 
     const tick = (now: number) => {
       rafId = 0;
@@ -151,6 +158,7 @@ export default function TextPressure({
       const mouse = mouseRef.current;
       const cursor = cursorRef.current;
 
+      // Smooth cursor follow
       const follow = 1 - Math.exp(-elapsed / (1000 * smoothing * smoothing));
       mouse.x += (cursor.x - mouse.x) * follow;
       mouse.y += (cursor.y - mouse.y) * follow;
@@ -165,26 +173,36 @@ export default function TextPressure({
         return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
       });
 
-      let hasActivePressure = false;
+      const pressures = currentPressuresRef.current;
+      let isStillAnimating = false;
 
       spans.forEach((span, i) => {
         const center = centers[i];
         if (!span || !center) return;
 
-        let pressure = 0;
+        // Target pressure: calculated when cursor is inside, otherwise 0
+        let target = 0;
         if (cursor.inside) {
           const distance = dist(mouse, center);
-          pressure = clamp01(1 - distance / maxDist);
+          target = clamp01(1 - distance / maxDist);
         }
 
-        if (pressure > 0.01) {
-          hasActivePressure = true;
+        // Fluid spring interpolation: smoothly transition towards target
+        // Entering is responsive, releasing has gentle exponential decay
+        const decayRate = target > (pressures[i] || 0) ? 14 : 7;
+        const step = 1 - Math.exp((-elapsed / 1000) * decayRate);
+        const currentP = (pressures[i] || 0) + (target - (pressures[i] || 0)) * step;
+        pressures[i] = currentP;
+
+        if (Math.abs(currentP - target) > 0.005 || currentP > 0.01) {
+          isStillAnimating = true;
         }
 
-        const wdth = width ? Math.floor(100 + 40 * pressure) : 100;
-        const wght = weight ? Math.floor(750 + 250 * pressure) : 800;
-        const italVal = italic ? (pressure * 0.7).toFixed(2) : "0";
-        const color = pressure > 0.15 && pressureColor ? pressureColor : textColor;
+        // Compute variable font parameters
+        const wdth = width ? Math.floor(100 + 40 * currentP) : 100;
+        const wght = weight ? Math.floor(750 + 250 * currentP) : 800;
+        const italVal = italic ? (currentP * 0.7).toFixed(2) : "0";
+        const color = currentP > 0.15 && pressureColor ? pressureColor : textColor;
 
         const settings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
         const previous = applied[i];
@@ -200,12 +218,8 @@ export default function TextPressure({
         }
       });
 
-      if (cursor.inside || hasActivePressure || settlingFrames < 25) {
-        if (!cursor.inside && !hasActivePressure) {
-          settlingFrames++;
-        } else {
-          settlingFrames = 0;
-        }
+      // Continue animation loop while cursor is inside or pressures are decaying back to 0
+      if (cursor.inside || isStillAnimating) {
         rafId = requestAnimationFrame(tick);
       } else {
         last = 0;
@@ -259,10 +273,12 @@ export default function TextPressure({
             }}
             data-char={char}
             aria-hidden="true"
-            className="inline-block transition-transform duration-150"
+            className="inline-block"
             style={{
               fontVariationSettings: "'wght' 750, 'wdth' 100, 'ital' 0",
               color: textColor,
+              transition:
+                "color 0.4s cubic-bezier(0.16, 1, 0.3, 1), font-variation-settings 0.25s ease-out",
             }}
           >
             {char}
