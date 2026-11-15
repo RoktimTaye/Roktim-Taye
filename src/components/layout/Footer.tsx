@@ -66,21 +66,21 @@ export default function Footer() {
 
         {/* Bottom Metadata & Links Bar */}
         <div className="mt-16 pt-8 border-t border-hairline flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-xs font-mono uppercase tracking-wider text-label">
-          {/* Email link */}
+          {/* Email link (uppercase, same size as linkedin, hover #7FA8FF) */}
           <a
             href={`mailto:${email}`}
-            className="text-text hover:text-accent transition-colors font-medium lowercase tracking-normal"
+            className="hover:text-[#7fa8ff] transition-colors duration-200"
           >
             {email}
           </a>
 
-          {/* Social Links */}
+          {/* Social Links (hover #7FA8FF) */}
           <div className="flex items-center gap-8">
             <a
               href="https://www.linkedin.com/in/roktim-taye-86957437a/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-text transition-colors"
+              className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               LinkedIn
             </a>
@@ -88,7 +88,7 @@ export default function Footer() {
               href="https://github.com/RoktimTaye"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-text transition-colors"
+              className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               GitHub
             </a>
@@ -100,12 +100,12 @@ export default function Footer() {
             <span className="text-label">{time || "IST"}</span>
           </div>
 
-          {/* Back to Top */}
+          {/* Back to Top (uppercase, hover #7FA8FF) */}
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-1.5 hover:text-text transition-colors cursor-pointer group"
+            className="flex items-center gap-1.5 hover:text-[#7fa8ff] transition-colors duration-200 cursor-pointer group uppercase"
           >
-            <span>Back to top</span>
+            <span>BACK TO TOP</span>
             <ArrowUp size={13} className="group-hover:-translate-y-0.5 transition-transform" />
           </button>
         </div>
