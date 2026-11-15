@@ -1,11 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import TextPressure from "@/components/ui/TextPressure";
 
 export default function Hero() {
-  const line1 = "ROKTIM".split("");
-  const line2 = "TAYE".split("");
-
   return (
     <section className="box-border flex flex-col justify-between min-h-[100svh] pt-[clamp(110px,15vh,160px)] px-[clamp(20px,4vw,56px)] pb-10 bg-bg select-none">
       {/* Top Eyebrow Metadata Grid */}
@@ -21,47 +19,55 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Massive Staggered Hero Name */}
-      <div className="flex flex-col justify-center flex-auto my-[clamp(20px,4vh,50px)]">
-        <h1 className="leading-none tracking-tight font-black uppercase overflow-hidden">
-          {/* First Name: ROKTIM */}
-          <div className="text-[min(19vw,14rem)] leading-[0.85] tracking-[-0.02em] text-text flex items-center overflow-hidden">
-            {line1.map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  duration: 0.85,
-                  delay: 0.05 * index,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="inline-block transition-transform duration-300 hover:-translate-y-2 hover:text-accent cursor-default"
-              >
-                {char}
-              </motion.span>
-            ))}
-          </div>
+      {/* Massive React Bits TextPressure Hero Name */}
+      <div className="flex flex-col justify-center flex-auto my-[clamp(16px,3vh,44px)] gap-2 sm:gap-4 overflow-hidden">
+        {/* Line 1: ROKTIM */}
+        <div className="w-full h-[clamp(80px,14vw,190px)] relative">
+          <TextPressure
+            text="ROKTIM"
+            flex={true}
+            weight={true}
+            width={true}
+            italic={true}
+            alpha={false}
+            stroke={false}
+            scale={false}
+            radius={0.45}
+            smoothing={0.4}
+            idle="wave"
+            idleSpeed={0.8}
+            clickRipple={true}
+            textColor="#edeae4"
+            pressureColor="#7fa8ff"
+            className="font-black tracking-[-0.02em]"
+            minFontSize={48}
+          />
+        </div>
 
-          {/* Second Name: TAYE (Right-aligned) */}
-          <div className="text-[min(19vw,14rem)] leading-[0.85] tracking-[-0.02em] text-text flex items-center justify-end overflow-hidden mt-2 sm:mt-0">
-            {line2.map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  duration: 0.85,
-                  delay: 0.2 + 0.05 * index,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="inline-block transition-transform duration-300 hover:-translate-y-2 hover:text-accent cursor-default"
-              >
-                {char}
-              </motion.span>
-            ))}
+        {/* Line 2: TAYE (Right Aligned Container) */}
+        <div className="w-full flex justify-end">
+          <div className="w-full sm:w-[65%] md:w-[55%] h-[clamp(80px,14vw,190px)] relative">
+            <TextPressure
+              text="TAYE"
+              flex={true}
+              weight={true}
+              width={true}
+              italic={true}
+              alpha={false}
+              stroke={false}
+              scale={false}
+              radius={0.45}
+              smoothing={0.4}
+              idle="wave"
+              idleSpeed={0.8}
+              clickRipple={true}
+              textColor="#edeae4"
+              pressureColor="#7fa8ff"
+              className="font-black tracking-[-0.02em]"
+              minFontSize={48}
+            />
           </div>
-        </h1>
+        </div>
       </div>
 
       {/* Bottom Row: Intro, Scroll Prompt, Work Button */}
