@@ -57,14 +57,15 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Hero Name Container with Tight Character Spacing & Distinct Rows (relative z-10) */}
-      <div className="relative z-10 flex flex-col justify-center flex-auto my-[clamp(20px,3.5vh,44px)]">
-        {/* Line 1: ROKTIM (Tightly spaced wordmark) */}
-        <div className="w-full h-[clamp(75px,12.5vw,175px)] relative flex items-center justify-start overflow-hidden">
+      {/* Hero Name Container with Letter Gap & Balanced Proportions (relative z-10) */}
+      <div className="relative z-10 flex flex-col justify-center flex-auto my-[clamp(16px,2.5vh,36px)]">
+        {/* Line 1: ROKTIM (Spaced wordmark, scaled) */}
+        <div className="w-full h-[clamp(85px,14.5vw,205px)] relative flex items-center justify-start overflow-hidden">
           <TextPressure
             text="ROKTIM"
             flex={false}
-            letterSpacing="-0.035em"
+            letterSpacing="0.045em"
+            gap="0.045em"
             weight={true}
             width={true}
             italic={true}
@@ -76,12 +77,13 @@ export default function Hero() {
           />
         </div>
 
-        {/* Line 2: TAYE (Right-Aligned, Tightly spaced wordmark) */}
-        <div className="w-full h-[clamp(75px,12.5vw,175px)] relative flex items-center justify-end mt-3 sm:mt-5 overflow-hidden">
+        {/* Line 2: TAYE (Right-Aligned, spaced wordmark, scaled) */}
+        <div className="w-full h-[clamp(85px,14.5vw,205px)] relative flex items-center justify-end mt-2 sm:mt-4 overflow-hidden">
           <TextPressure
             text="TAYE"
             flex={false}
-            letterSpacing="-0.035em"
+            letterSpacing="0.045em"
+            gap="0.045em"
             weight={true}
             width={true}
             italic={true}

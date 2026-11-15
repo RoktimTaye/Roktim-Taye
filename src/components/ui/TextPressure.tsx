@@ -27,6 +27,7 @@ export interface TextPressureProps {
   italic?: boolean;
   flex?: boolean;
   letterSpacing?: string;
+  gap?: string;
   radius?: number;
   smoothing?: number;
   textColor?: string;
@@ -43,7 +44,8 @@ export default function TextPressure({
   weight = true,
   italic = true,
   flex = false,
-  letterSpacing = "-0.035em",
+  letterSpacing = "0.045em",
+  gap = "0.045em",
   radius = 0.22,
   smoothing = 0.35,
   textColor = "#edeae4",
@@ -83,10 +85,10 @@ export default function TextPressure({
       const { width: containerW, height: containerH } = container.getBoundingClientRect();
       if (!containerW || !containerH) return;
 
-      const fontFromHeight = containerH * 0.92;
+      const fontFromHeight = containerH * 0.94;
       const fontFromWidth = flex
-        ? containerW / (chars.length * 0.62)
-        : containerW / (chars.length * 0.52);
+        ? containerW / (chars.length * 0.65)
+        : containerW / (chars.length * 0.56);
 
       const calculatedFontSize = Math.max(
         Math.min(fontFromWidth, fontFromHeight),
@@ -245,6 +247,7 @@ export default function TextPressure({
     fontSize,
     lineHeight: 1,
     letterSpacing,
+    gap: gap || "0.045em",
     margin: 0,
     userSelect: "none",
     whiteSpace: "nowrap",
