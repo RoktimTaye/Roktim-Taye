@@ -11,11 +11,16 @@ export default function SelectedWork() {
   return (
     <section id="work" className="py-[clamp(80px,14vh,160px)] px-[clamp(20px,4vw,56px)] bg-bg select-none">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap');
 
         .font-work-title {
           font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          transition: font-weight 0.35s ease, color 0.35s ease;
+          transform-origin: left center;
+          transition: font-variation-settings 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      font-weight 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      letter-spacing 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                      color 0.35s ease;
         }
       `}</style>
 
@@ -57,11 +62,16 @@ export default function SelectedWork() {
                       </span>
 
                       <h2
-                        className={`font-work-title flex-1 text-[clamp(34px,5.2vw,86px)] tracking-tight leading-[0.98] transition-all duration-300 ${
+                        className={`font-work-title flex-1 text-[clamp(34px,5.2vw,86px)] leading-[0.98] ${
                           isSelected ? "text-accent" : "text-[#7a756f] group-hover:text-text"
                         }`}
                         style={{
                           fontWeight: isSelected ? 500 : 700,
+                          fontVariationSettings: isSelected
+                            ? "'wdth' 116, 'wght' 500"
+                            : "'wdth' 94, 'wght' 700",
+                          letterSpacing: isSelected ? "0.03em" : "-0.015em",
+                          transform: isSelected ? "scale(1.025)" : "scale(1)",
                         }}
                       >
                         {project.title}
