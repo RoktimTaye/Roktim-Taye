@@ -36,40 +36,40 @@ export default function ProjectPage({ params }: Props) {
   const nextProject = projects[(currentIndex + 1) % projects.length];
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white pt-28 pb-24 px-6 sm:px-8 lg:px-12">
+    <main className="min-h-screen bg-bg text-text pt-28 pb-24 px-[clamp(20px,4vw,56px)]">
       <div className="max-w-5xl mx-auto">
-        {/* Navigation Bar / Back */}
+        {/* Back button */}
         <div className="mb-12">
           <Link
-            href="/#portfolio"
-            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white transition-colors group"
+            href="/#work"
+            className="inline-flex items-center gap-2 eyebrow text-muted hover:text-text transition-colors group"
           >
-            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            <span>Back to All Works</span>
+            <ArrowLeft size={13} className="group-hover:-translate-x-1 transition-transform" />
+            <span>(Back to Selected Work)</span>
           </Link>
         </div>
 
         {/* Project Header */}
         <div className="space-y-4 mb-10">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#e63946]">
+          <div className="flex items-center gap-3">
+            <span className="eyebrow eyebrow--accent">
               {project.category}
             </span>
-            <span className="text-neutral-600">•</span>
-            <span className="text-xs font-mono text-neutral-500">{project.year}</span>
+            <span className="text-label">•</span>
+            <span className="eyebrow text-label">{project.year}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-text uppercase">
             {project.title}
           </h1>
 
-          <p className="text-lg sm:text-xl text-neutral-300 font-light leading-relaxed max-w-2xl">
+          <p className="text-lg sm:text-xl text-muted font-light leading-relaxed max-w-2xl">
             {project.tagline}
           </p>
         </div>
 
         {/* Cinematic Video Showcase */}
-        <div className="relative rounded-3xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl shadow-black/80 aspect-[16/9] mb-14">
+        <div className="relative rounded-3xl overflow-hidden bg-surface border border-hairline shadow-2xl shadow-black aspect-[16/9] mb-14">
           <video
             src={project.videoUrl}
             autoPlay
@@ -81,41 +81,39 @@ export default function ProjectPage({ params }: Props) {
           />
         </div>
 
-        {/* Project Metadata Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 py-8 border-y border-neutral-900 mb-12">
+        {/* Metadata Row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 py-8 border-y border-hairline mb-12">
           <div>
-            <span className="text-xs font-mono uppercase text-neutral-500 block mb-1 flex items-center gap-1">
+            <span className="eyebrow block mb-1.5 flex items-center gap-1">
               <User size={12} /> Role
             </span>
-            <span className="text-sm font-medium text-neutral-200">{project.role}</span>
+            <span className="text-sm font-medium text-text">{project.role}</span>
           </div>
 
           <div>
-            <span className="text-xs font-mono uppercase text-neutral-500 block mb-1 flex items-center gap-1">
+            <span className="eyebrow block mb-1.5 flex items-center gap-1">
               <Calendar size={12} /> Year
             </span>
-            <span className="text-sm font-medium text-neutral-200">{project.year}</span>
+            <span className="text-sm font-medium text-text">{project.year}</span>
           </div>
 
           <div>
-            <span className="text-xs font-mono uppercase text-neutral-500 block mb-1 flex items-center gap-1">
+            <span className="eyebrow block mb-1.5 flex items-center gap-1">
               <Layers size={12} /> Category
             </span>
-            <span className="text-sm font-medium text-neutral-200">{project.category}</span>
+            <span className="text-sm font-medium text-text">{project.category}</span>
           </div>
 
           <div>
-            <span className="text-xs font-mono uppercase text-neutral-500 block mb-1">
-              Deliverables
-            </span>
-            <span className="text-sm font-medium text-neutral-200">Prototype & Code</span>
+            <span className="eyebrow block mb-1.5">Deliverables</span>
+            <span className="text-sm font-medium text-text">Prototype & Code</span>
           </div>
         </div>
 
-        {/* Content & Story */}
+        {/* Case Narrative */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-16">
-          <div className="md:col-span-8 space-y-6 text-neutral-300 font-light leading-relaxed text-base sm:text-lg">
-            <h2 className="text-xl font-bold text-white tracking-tight">Overview & Architecture</h2>
+          <div className="md:col-span-8 space-y-6 text-muted font-light leading-relaxed text-base sm:text-lg">
+            <h2 className="text-xl font-bold text-text tracking-tight uppercase">Overview & Architecture</h2>
             <p>{project.description}</p>
             {project.longDescription?.map((para, i) => (
               <p key={i}>{para}</p>
@@ -124,14 +122,14 @@ export default function ProjectPage({ params }: Props) {
 
           <div className="md:col-span-4 space-y-6">
             <div>
-              <h3 className="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-3">
+              <h3 className="eyebrow mb-3">
                 Tech Stack
               </h3>
               <div className="flex flex-wrap gap-2">
                 {project.techStack.map((tech, i) => (
                   <span
                     key={i}
-                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 font-mono"
+                    className="text-xs px-3 py-1.5 rounded-full bg-surface border border-hairline text-text font-mono"
                   >
                     {tech}
                   </span>
@@ -144,7 +142,7 @@ export default function ProjectPage({ params }: Props) {
                 href={project.liveUrl || "https://github.com/RoktimTaye"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider text-white bg-[#e63946] hover:bg-[#ff5a67] transition-all hover:scale-[1.02] shadow-lg shadow-red-500/20"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider text-black bg-accent hover:bg-accent-hover transition-all hover:scale-[1.02]"
               >
                 <span>Live Project</span>
                 <ExternalLink size={14} />
@@ -154,7 +152,7 @@ export default function ProjectPage({ params }: Props) {
                 href={project.githubUrl || "https://github.com/RoktimTaye"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider text-neutral-300 bg-neutral-900 border border-neutral-800 hover:text-white hover:border-neutral-700 transition-all hover:scale-[1.02]"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-xs font-mono uppercase tracking-wider text-muted bg-surface border border-hairline hover:text-text hover:border-muted transition-all hover:scale-[1.02]"
               >
                 <Github size={15} />
                 <span>Source Code</span>
@@ -163,28 +161,28 @@ export default function ProjectPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Previous / Next Project Navigation */}
-        <div className="pt-12 border-t border-neutral-900 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Prev / Next Navigation */}
+        <div className="pt-12 border-t border-hairline grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Link
             href={`/projects/${prevProject.slug}`}
-            className="p-6 rounded-2xl bg-neutral-900/60 border border-white/5 hover:border-white/20 transition-all group"
+            className="p-6 rounded-2xl bg-surface/40 border border-hairline hover:border-accent/40 transition-all group"
           >
-            <span className="text-xs font-mono text-neutral-500 uppercase block mb-1">
+            <span className="eyebrow block mb-1">
               ← Previous Project
             </span>
-            <span className="text-lg font-bold text-white group-hover:text-[#6eb5ff] transition-colors">
+            <span className="text-lg font-bold text-text group-hover:text-accent transition-colors uppercase">
               {prevProject.title}
             </span>
           </Link>
 
           <Link
             href={`/projects/${nextProject.slug}`}
-            className="p-6 rounded-2xl bg-neutral-900/60 border border-white/5 hover:border-white/20 transition-all text-right group"
+            className="p-6 rounded-2xl bg-surface/40 border border-hairline hover:border-accent/40 transition-all text-right group"
           >
-            <span className="text-xs font-mono text-neutral-500 uppercase block mb-1">
+            <span className="eyebrow block mb-1">
               Next Project →
             </span>
-            <span className="text-lg font-bold text-white group-hover:text-[#6eb5ff] transition-colors">
+            <span className="text-lg font-bold text-text group-hover:text-accent transition-colors uppercase">
               {nextProject.title}
             </span>
           </Link>

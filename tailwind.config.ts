@@ -9,36 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: {
-          primary: "#0a0a0a",
-          card: "#141414",
-          elevated: "#1a1a1a",
-        },
-        text: {
-          primary: "#ffffff",
-          secondary: "#999999",
-          muted: "#666666",
-        },
+        bg: "#111010",
+        surface: "#1a1918",
+        text: "#edeae4",
+        muted: "#b9b4ac",
+        subtle: "#a8a39b",
+        label: "#8f8a82",
+        faint: "#86817a",
+        hairline: "#edeae41f",
+        chip: "#edeae433",
         accent: {
-          red: "#e63946",
-          blue: "#6eb5ff",
-          hover: "#ff5a67",
-        },
-        border: {
-          subtle: "#222222",
-          card: "#2a2a2a",
+          DEFAULT: "#7fa8ff",
+          hover: "#9bbaff",
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
-      fontSize: {
-        "display-xl": "clamp(4.5rem, 13vw, 12.5rem)",
-        "display-lg": "clamp(2.5rem, 6vw, 5rem)",
-        "cta": "clamp(3.5rem, 10vw, 10rem)",
+      letterSpacing: {
+        tighter: "-0.04em",
+        tight: "-0.02em",
+        normal: "0em",
+        wide: "0.04em",
+        wider: "0.08em",
+        widest: "0.14em",
       },
       animation: {
-        marquee: "marquee 35s linear infinite",
+        marquee: "marquee 25s linear infinite",
       },
       keyframes: {
         marquee: {

@@ -2,23 +2,39 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 30);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      // Indian Standard Time (Dibrugarh, Assam)
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      };
+      setTime(now.toLocaleTimeString("en-US", options));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -26,95 +42,114 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10 py-4"
+            ? "bg-[#111010]/85 backdrop-blur-md border-b border-hairline py-4"
             : "bg-transparent py-6"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between">
-          {/* Logo */}
+        <div className="max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-14 flex items-center justify-between">
+          {/* Left: Brand */}
           <Link
             href="/"
-            className="text-sm md:text-base font-semibold tracking-wider uppercase text-white hover:opacity-80 transition-opacity"
+            className="text-xs sm:text-sm font-semibold tracking-wider uppercase text-text hover:text-accent transition-colors flex items-center gap-2"
           >
-            ROKTIM TAYE
+            <span>ROKTIM TAYE</span>
+            <span className="hidden sm:inline-block text-[10px] text-label font-mono">
+              / ©2026
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 text-sm tracking-wide text-neutral-400">
+          {/* Center: Navigation */}
+          <nav className="hidden md:flex items-center gap-10 text-xs tracking-wider uppercase font-mono text-muted">
             <a
-              href="#portfolio"
-              className="hover:text-white transition-colors duration-200"
+              href="#work"
+              className="hover:text-text transition-colors duration-200"
             >
-              Portfolio
+              Work
             </a>
             <a
               href="#about"
-              className="hover:text-white transition-colors duration-200"
+              className="hover:text-text transition-colors duration-200"
             >
               About
             </a>
             <a
-              href="#contact"
-              className="hover:text-white transition-colors duration-200"
+              href="#services"
+              className="hover:text-text transition-colors duration-200"
             >
-              Contact
+              Services
             </a>
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center">
+          {/* Right: Clock & CTA */}
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-label">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Dibrugarh {time || "IST"}</span>
+            </div>
+
             <a
               href="#contact"
-              className="px-5 py-2 text-xs font-semibold tracking-wider uppercase text-white bg-[#e63946] hover:bg-[#ff5a67] rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-red-500/20"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono uppercase tracking-wider text-text bg-surface hover:bg-neutral-800 border border-hairline hover:border-accent hover:text-accent rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95"
             >
-              Get In Touch
+              <span>Start a project</span>
+              <ArrowUpRight size={13} />
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-neutral-300 hover:text-white p-2 focus:outline-none"
-            aria-label="Toggle menu"
+            className="md:hidden text-muted hover:text-text p-2"
+            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </header>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col justify-center items-center px-8 md:hidden">
-          <nav className="flex flex-col items-center gap-8 text-2xl font-light text-neutral-200">
+        <div className="fixed inset-0 z-40 bg-[#111010]/95 backdrop-blur-2xl flex flex-col justify-between p-8 md:hidden">
+          <div className="pt-20 flex flex-col gap-8 text-3xl font-light text-text">
             <a
-              href="#portfolio"
+              href="#work"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white hover:scale-105 transition-all"
+              className="hover:text-accent transition-colors"
             >
-              Portfolio
+              Work
             </a>
             <a
               href="#about"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white hover:scale-105 transition-all"
+              className="hover:text-accent transition-colors"
             >
               About
             </a>
             <a
+              href="#services"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-accent transition-colors"
+            >
+              Services
+            </a>
+            <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white hover:scale-105 transition-all"
+              className="hover:text-accent transition-colors"
             >
               Contact
             </a>
+          </div>
+
+          <div className="border-t border-hairline pt-6 flex flex-col gap-4 text-xs font-mono text-label">
+            <div>Dibrugarh, Assam, India • {time}</div>
             <a
               href="mailto:roktimtayecoding@gmail.com"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-6 px-7 py-3 text-sm font-semibold tracking-wider uppercase text-white bg-[#e63946] rounded-full shadow-lg shadow-red-500/30"
+              className="text-text hover:text-accent"
             >
-              Let&apos;s Talk
+              roktimtayecoding@gmail.com
             </a>
-          </nav>
+          </div>
         </div>
       )}
     </>
