@@ -6,6 +6,15 @@ import TextPressure from "@/components/ui/TextPressure";
 export default function Hero() {
   return (
     <section className="relative box-border flex flex-col justify-between min-h-[100svh] pt-[clamp(110px,15vh,160px)] px-[clamp(20px,4vw,56px)] pb-10 bg-bg select-none overflow-hidden">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;700;800;900&display=swap');
+
+        .archivo-thin {
+          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-weight: 100;
+        }
+      `}</style>
+
       {/* Background Image Layer (z-0: in front of bg color, behind text z-10) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Fullcover Photo */}
@@ -92,8 +101,8 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-6 pt-6"
       >
-        {/* Intro */}
-        <p className="max-w-[36ch] text-[clamp(16px,1.5vw,21px)] text-text font-bold leading-[1.4] m-0">
+        {/* Intro in Archivo Thin 100 */}
+        <p className="archivo-thin max-w-[36ch] text-[clamp(17px,1.6vw,22px)] text-text leading-[1.4] m-0 tracking-wide">
           I design and build websites and apps with a lot of movement in them. Startups, small businesses and fellow creators, mostly.
         </p>
 
