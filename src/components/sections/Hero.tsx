@@ -19,52 +19,38 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Massive React Bits TextPressure Hero Name */}
-      <div className="flex flex-col justify-center flex-auto my-[clamp(16px,3vh,44px)] gap-2 sm:gap-4 overflow-hidden">
+      {/* Hero Name Container with Distinct Vertical Spacing */}
+      <div className="flex flex-col justify-center flex-auto my-[clamp(24px,4vh,48px)]">
         {/* Line 1: ROKTIM */}
-        <div className="w-full h-[clamp(80px,14vw,190px)] relative">
+        <div className="w-full h-[clamp(75px,12vw,170px)] relative flex items-center">
           <TextPressure
             text="ROKTIM"
             flex={true}
             weight={true}
             width={true}
             italic={true}
-            alpha={false}
-            stroke={false}
-            scale={false}
-            radius={0.45}
-            smoothing={0.4}
-            idle="wave"
-            idleSpeed={0.8}
-            clickRipple={true}
+            radius={0.22}
+            smoothing={0.35}
             textColor="#edeae4"
             pressureColor="#7fa8ff"
-            className="font-black tracking-[-0.02em]"
-            minFontSize={48}
+            minFontSize={42}
           />
         </div>
 
-        {/* Line 2: TAYE (Right Aligned Container) */}
-        <div className="w-full flex justify-end">
-          <div className="w-full sm:w-[65%] md:w-[55%] h-[clamp(80px,14vw,190px)] relative">
+        {/* Line 2: TAYE (Right-Aligned, Zero Overlap) */}
+        <div className="w-full flex justify-end mt-4 sm:mt-6">
+          <div className="w-full sm:w-[60%] md:w-[50%] h-[clamp(75px,12vw,170px)] relative flex items-center justify-end">
             <TextPressure
               text="TAYE"
               flex={true}
               weight={true}
               width={true}
               italic={true}
-              alpha={false}
-              stroke={false}
-              scale={false}
-              radius={0.45}
-              smoothing={0.4}
-              idle="wave"
-              idleSpeed={0.8}
-              clickRipple={true}
+              radius={0.25}
+              smoothing={0.35}
               textColor="#edeae4"
               pressureColor="#7fa8ff"
-              className="font-black tracking-[-0.02em]"
-              minFontSize={48}
+              minFontSize={42}
             />
           </div>
         </div>

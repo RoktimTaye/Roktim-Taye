@@ -5,19 +5,9 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-const RIPPLE_LIFE = 1.3;
-const MAX_RIPPLES = 6;
-const WAVE_PERIOD = 3.2;
-const PULSE_PERIOD = 2.8;
-const PULSE_DEPTH = 0.42;
-
 interface Point {
   x: number;
   y: number;
-}
-
-interface Ripple extends Point {
-  start: number;
 }
 
 const dist = (a: Point, b: Point) => {
@@ -28,34 +18,6 @@ const dist = (a: Point, b: Point) => {
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
-const getIdlePressure = (mode: string, position: number, clock: number, spread: number) => {
-  if (mode === "wave") {
-    const crest = 0.5 + 0.5 * Math.cos(Math.PI * 2 * (position / spread - clock / WAVE_PERIOD));
-    return crest * crest;
-  }
-  if (mode === "pulse") {
-    const lag = Math.abs(position - 0.5) * 0.4;
-    const breath = 0.5 - 0.5 * Math.cos(Math.PI * 2 * (clock / PULSE_PERIOD - lag));
-    return PULSE_DEPTH * breath * breath * (3 - 2 * breath);
-  }
-  return 0;
-};
-
-const getRipplePressure = (ripples: Ripple[], point: Point, now: number, span: number) => {
-  const band = Math.max(span * 0.14, 32);
-  let total = 0;
-  for (const ripple of ripples) {
-    const age = (now - ripple.start) / 1000;
-    if (age <= 0 || age >= RIPPLE_LIFE) continue;
-    const offset = (dist(ripple, point) - age * span * 1.25) / band;
-    if (offset <= -1 || offset >= 1) continue;
-    const fade = 1 - age / RIPPLE_LIFE;
-    const swell = (1 - offset * offset) ** 2 * fade * fade * Math.min(1, age / 0.06);
-    total = 1 - (1 - total) * (1 - swell);
-  }
-  return total;
-};
-
 export interface TextPressureProps {
   text?: string;
   fontFamily?: string;
@@ -63,43 +25,27 @@ export interface TextPressureProps {
   width?: boolean;
   weight?: boolean;
   italic?: boolean;
-  alpha?: boolean;
   flex?: boolean;
-  stroke?: boolean;
-  scale?: boolean;
   radius?: number;
   smoothing?: number;
-  idle?: "none" | "wave" | "pulse";
-  idleSpeed?: number;
-  clickRipple?: boolean;
   textColor?: string;
   pressureColor?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
   className?: string;
   minFontSize?: number;
 }
 
 export default function TextPressure({
   text = "ROKTIM",
-  fontFamily = "Roboto Flex, sans-serif",
+  fontFamily = "Roboto Flex, -apple-system, BlinkMacSystemFont, sans-serif",
   fontUrl = "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap",
   width = true,
   weight = true,
   italic = true,
-  alpha = false,
   flex = true,
-  stroke = false,
-  scale = false,
-  radius = 0.5,
-  smoothing = 0.5,
-  idle = "none",
-  idleSpeed = 1,
-  clickRipple = true,
-  textColor = "currentColor",
-  pressureColor = "",
-  strokeColor = "#7fa8ff",
-  strokeWidth = 2,
+  radius = 0.25,
+  smoothing = 0.35,
+  textColor = "#edeae4",
+  pressureColor = "#7fa8ff",
   className = "",
   minFontSize = 36,
 }: TextPressureProps) {
@@ -107,177 +53,107 @@ export default function TextPressure({
   const titleRef = useRef<HTMLHeadingElement>(null);
   const spansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const wakeRef = useRef<(() => void) | null>(null);
-  const visibleRef = useRef(true);
-  const ripplesRef = useRef<Ripple[]>([]);
-  const optionsRef = useRef({
-    width,
-    weight,
-    italic,
-    alpha,
-    radius,
-    smoothing,
-    idle,
-    idleSpeed,
-    clickRipple,
-    textColor,
-    pressureColor,
-  });
 
   const mouseRef = useRef<Point>({ x: 0, y: 0 });
-  const cursorRef = useRef<{ x: number; y: number; seen: boolean }>({ x: 0, y: 0, seen: false });
+  const cursorRef = useRef<{ x: number; y: number; inside: boolean }>({
+    x: 0,
+    y: 0,
+    inside: false,
+  });
 
   const [fontSize, setFontSize] = useState(minFontSize);
-  const [scaleY, setScaleY] = useState(1);
-
   const chars = Array.from(text);
 
-  useEffect(() => {
-    optionsRef.current = {
-      width,
-      weight,
-      italic,
-      alpha,
-      radius,
-      smoothing,
-      idle,
-      idleSpeed,
-      clickRipple,
-      textColor,
-      pressureColor,
-    };
-    wakeRef.current?.();
-  }, [width, weight, italic, alpha, radius, smoothing, idle, idleSpeed, clickRipple, textColor, pressureColor]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const cursor = cursorRef.current;
-    const wake = () => wakeRef.current?.();
-    const track = (x: number, y: number) => {
-      cursor.x = x;
-      cursor.y = y;
-      cursor.seen = true;
-      wake();
-    };
-    const handleMouseMove = (e: MouseEvent) => track(e.clientX, e.clientY);
-    const handleTouch = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (t) track(t.clientX, t.clientY);
-    };
-    const handleLeave = () => {
-      cursor.seen = false;
-      wake();
-    };
-    const handlePress = (e: PointerEvent) => {
-      if (!optionsRef.current.clickRipple) return;
-      const ripples = ripplesRef.current;
-      ripples.push({ x: e.clientX, y: e.clientY, start: performance.now() });
-      if (ripples.length > MAX_RIPPLES) ripples.shift();
-      wake();
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchstart", handleTouch, { passive: true });
-    window.addEventListener("touchmove", handleTouch, { passive: true });
-    window.addEventListener("touchend", handleLeave);
-    window.addEventListener("touchcancel", handleLeave);
-    window.addEventListener("scroll", wake, { passive: true, capture: true });
-    document.documentElement.addEventListener("mouseleave", handleLeave);
-    (document.fonts as any)?.addEventListener?.("loadingdone", wake);
-    container?.addEventListener("pointerdown", handlePress);
-
-    if (container) {
-      const { left, top, width: w, height: h } = container.getBoundingClientRect();
-      mouseRef.current.x = left + w / 2;
-      mouseRef.current.y = top + h / 2;
-      cursor.x = mouseRef.current.x;
-      cursor.y = mouseRef.current.y;
-    }
-
-    const observer = new IntersectionObserver(([entry]) => {
-      visibleRef.current = entry.isIntersecting;
-      if (entry.isIntersecting) wake();
-    });
-    if (container) observer.observe(container);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchstart", handleTouch);
-      window.removeEventListener("touchmove", handleTouch);
-      window.removeEventListener("touchend", handleLeave);
-      window.removeEventListener("touchcancel", handleLeave);
-      window.removeEventListener("scroll", wake, { capture: true });
-      document.documentElement.removeEventListener("mouseleave", handleLeave);
-      (document.fonts as any)?.removeEventListener?.("loadingdone", wake);
-      container?.removeEventListener("pointerdown", handlePress);
-      observer.disconnect();
-    };
-  }, []);
-
+  // Resize calculation that respects both container width and container height
   useIsomorphicLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const resize = () => {
       const { width: containerW, height: containerH } = container.getBoundingClientRect();
-      const nextFontSize = Math.max(
-        chars.length ? containerW / (chars.length * 0.58) : minFontSize,
+      if (!containerW || !containerH) return;
+
+      // Font size must comfortably fit both width and height to prevent vertical collisions
+      const fontFromHeight = containerH * 0.88;
+      const fontFromWidth = containerW / (chars.length * 0.62);
+      const calculatedFontSize = Math.max(
+        Math.min(fontFromWidth, fontFromHeight),
         minFontSize
       );
-      setFontSize(nextFontSize);
-      setScaleY(scale && containerH > 0 ? containerH / nextFontSize : 1);
+
+      setFontSize(calculatedFontSize);
     };
 
     resize();
     const observer = new ResizeObserver(resize);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [chars.length, minFontSize, scale]);
+  }, [chars.length, minFontSize]);
 
+  // Pointer tracking ONLY on the container/letters
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const wake = () => wakeRef.current?.();
+
+    const handlePointerEnter = (e: PointerEvent) => {
+      cursorRef.current.inside = true;
+      cursorRef.current.x = e.clientX;
+      cursorRef.current.y = e.clientY;
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
+      wake();
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      cursorRef.current.inside = true;
+      cursorRef.current.x = e.clientX;
+      cursorRef.current.y = e.clientY;
+      wake();
+    };
+
+    const handlePointerLeave = () => {
+      cursorRef.current.inside = false;
+      wake();
+    };
+
+    container.addEventListener("pointerenter", handlePointerEnter);
+    container.addEventListener("pointermove", handlePointerMove);
+    container.addEventListener("pointerleave", handlePointerLeave);
+
+    return () => {
+      container.removeEventListener("pointerenter", handlePointerEnter);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerleave", handlePointerLeave);
+    };
+  }, []);
+
+  // Animation Loop: Reacts ONLY when cursor is inside
   useEffect(() => {
     const title = titleRef.current;
-    const container = containerRef.current;
-    if (!title || !container) return;
+    if (!title) return;
 
-    const motionQuery = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     const applied: any[] = [];
     let rafId = 0;
     let last = 0;
-    let idleFrames = 0;
-    let clock = 0;
-    let engage = optionsRef.current.idle === "wave" || optionsRef.current.idle === "pulse" ? 0 : 1;
+    let settlingFrames = 0;
 
     const tick = (now: number) => {
       rafId = 0;
       const elapsed = last ? Math.min(now - last, 64) : 1000 / 60;
       last = now;
 
-      const options = optionsRef.current;
-      const idleMode =
-        (options.idle === "wave" || options.idle === "pulse") && !motionQuery?.matches ? options.idle : "none";
       const mouse = mouseRef.current;
       const cursor = cursorRef.current;
-      const lag = 1000 * options.smoothing * options.smoothing;
-      const follow = lag > 1 ? 1 - Math.exp(-elapsed / lag) : 1;
+
+      // Smooth cursor follow
+      const follow = 1 - Math.exp(-elapsed / (1000 * smoothing * smoothing));
       mouse.x += (cursor.x - mouse.x) * follow;
       mouse.y += (cursor.y - mouse.y) * follow;
 
-      let present = 1;
-      if (idleMode !== "none") {
-        const box = container.getBoundingClientRect();
-        const inside = cursor.x >= box.left && cursor.x <= box.right && cursor.y >= box.top && cursor.y <= box.bottom;
-        present = cursor.seen && inside ? 1 : 0;
-      }
-      engage += (present - engage) * (1 - Math.exp(-elapsed / 320));
-      if (Math.abs(present - engage) < 0.002) engage = present;
-      const idling = idleMode !== "none" && engage < 1;
-      if (idling) clock += (elapsed / 1000) * options.idleSpeed;
-
-      const ripples = ripplesRef.current;
-      while (ripples.length && now - ripples[0].start > RIPPLE_LIFE * 1000) ripples.shift();
-
       const titleRect = title.getBoundingClientRect();
-      const maxDist = Math.max(titleRect.width * options.radius, 1);
-      const spread = Math.max(options.radius * 2, 0.2);
+      const maxDist = Math.max(titleRect.width * radius, 120);
 
       const spans = spansRef.current;
       const centers = spans.map((span) => {
@@ -286,58 +162,58 @@ export default function TextPressure({
         return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
       });
 
-      let changed = false;
+      let hasActivePressure = false;
+
       spans.forEach((span, i) => {
         const center = centers[i];
         if (!span || !center) return;
 
-        let pressure = clamp01(1 - dist(mouse, center) / maxDist);
-        if (idling) {
-          const position = (center.x - titleRect.left) / Math.max(titleRect.width, 1);
-          const resting = getIdlePressure(idleMode, position, clock, spread);
-          pressure = resting + (pressure - resting) * engage;
-        }
-        if (ripples.length) {
-          const swell = getRipplePressure(ripples, center, now, titleRect.width);
-          pressure = 1 - (1 - pressure) * (1 - swell);
+        // ONLY apply pressure when cursor is hovering over the letters!
+        let pressure = 0;
+        if (cursor.inside) {
+          const distance = dist(mouse, center);
+          pressure = clamp01(1 - distance / maxDist);
         }
 
-        const wdth = options.width ? Math.floor(25 + 125 * pressure) : 100;
-        const wght = options.weight ? Math.floor(100 + 900 * pressure) : 400;
-        const italVal = options.italic ? pressure.toFixed(2) : "0";
-        const alphaVal = options.alpha ? pressure.toFixed(2) : "";
-        const tint = Math.round((1 - (1 - pressure) * (1 - pressure)) * 100);
-        const color = options.pressureColor
-          ? `color-mix(in oklab, ${options.pressureColor} ${tint}%, ${options.textColor})`
-          : "";
+        if (pressure > 0.01) {
+          hasActivePressure = true;
+        }
+
+        // Variable font values: resting state = 800 weight, 100 width, 0 italic
+        const wdth = width ? Math.floor(100 + 45 * pressure) : 100;
+        const wght = weight ? Math.floor(750 + 250 * pressure) : 800;
+        const italVal = italic ? (pressure * 0.8).toFixed(2) : "0";
+        const color = pressure > 0.15 && pressureColor ? pressureColor : textColor;
+
         const settings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
         const previous = applied[i];
 
         if (
           !previous ||
-          previous.span !== span ||
           previous.settings !== settings ||
-          previous.alphaVal !== alphaVal ||
           previous.color !== color
         ) {
           span.style.fontVariationSettings = settings;
-          span.style.opacity = alphaVal;
-          if (color) span.style.color = color;
-          applied[i] = { span, settings, alphaVal, color };
-          changed = true;
+          span.style.color = color;
+          applied[i] = { settings, color };
         }
       });
 
-      const moving = Math.abs(cursor.x - mouse.x) > 0.1 || Math.abs(cursor.y - mouse.y) > 0.1;
-      const animating = moving || idling || engage !== present || ripples.length > 0;
-      idleFrames = animating ? 0 : idleFrames + 1;
-
-      if (animating || (changed && idleFrames < 60)) rafId = requestAnimationFrame(tick);
-      else last = 0;
+      // Keep rendering until letters return to resting state smoothly
+      if (cursor.inside || hasActivePressure || settlingFrames < 30) {
+        if (!cursor.inside && !hasActivePressure) {
+          settlingFrames++;
+        } else {
+          settlingFrames = 0;
+        }
+        rafId = requestAnimationFrame(tick);
+      } else {
+        last = 0;
+      }
     };
 
     const wake = () => {
-      if (!rafId && visibleRef.current) rafId = requestAnimationFrame(tick);
+      if (!rafId) rafId = requestAnimationFrame(tick);
     };
 
     wakeRef.current = wake;
@@ -347,66 +223,32 @@ export default function TextPressure({
       cancelAnimationFrame(rafId);
       wakeRef.current = null;
     };
-  }, []);
-
-  useEffect(() => {
-    wakeRef.current?.();
-  }, [fontSize, scaleY, text, flex, fontFamily]);
+  }, [radius, smoothing, width, weight, italic, textColor, pressureColor]);
 
   const titleStyle: React.CSSProperties = {
     fontFamily,
     textTransform: "uppercase",
     fontSize,
-    lineHeight: 0.9,
-    transform: `scale(1, ${scaleY})`,
-    transformOrigin: "center top",
+    lineHeight: 1,
     margin: 0,
-    textAlign: "center",
     userSelect: "none",
     whiteSpace: "nowrap",
-    fontWeight: 100,
     width: "100%",
     color: textColor,
-    display: flex ? "flex" : undefined,
-    justifyContent: flex ? "space-between" : undefined,
-    ["--text-pressure-stroke-width" as any]: `${strokeWidth}px`,
-    ["--text-pressure-stroke-color" as any]: strokeColor,
+    display: flex ? "flex" : "inline-flex",
+    justifyContent: flex ? "space-between" : "flex-start",
+    alignItems: "center",
   };
 
   return (
     <div
       ref={containerRef}
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        background: "transparent",
-      }}
+      className={`relative w-full h-full flex items-center overflow-hidden cursor-default ${className}`}
     >
       <style>{`
         @import url('${fontUrl}');
-
-        .text-pressure-title.is-stroke span {
-          position: relative;
-        }
-
-        .text-pressure-title.is-stroke span::after {
-          content: attr(data-char);
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: transparent;
-          z-index: -1;
-          -webkit-text-stroke-width: var(--text-pressure-stroke-width);
-          -webkit-text-stroke-color: var(--text-pressure-stroke-color);
-        }
       `}</style>
-      <h1
-        ref={titleRef}
-        aria-label={text}
-        className={`text-pressure-title ${stroke ? "is-stroke" : ""} ${className}`}
-        style={titleStyle}
-      >
+      <h1 ref={titleRef} aria-label={text} style={titleStyle}>
         {chars.map((char, i) => (
           <span
             key={i}
@@ -415,7 +257,11 @@ export default function TextPressure({
             }}
             data-char={char}
             aria-hidden="true"
-            style={{ display: "inline-block" }}
+            className="inline-block transition-transform duration-150"
+            style={{
+              fontVariationSettings: "'wght' 750, 'wdth' 100, 'ital' 0",
+              color: textColor,
+            }}
           >
             {char}
           </span>
