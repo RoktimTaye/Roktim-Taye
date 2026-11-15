@@ -71,6 +71,13 @@ export default function ServiceTiles() {
                       transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
                       color 0.35s ease;
         }
+
+        .archivo-thin {
+          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-weight: 100;
+          font-style: normal;
+          font-variation-settings: 'wght' 100, 'wdth' 100;
+        }
       `}</style>
       <div className="w-full">
         {/* Section Head */}
@@ -183,8 +190,8 @@ export default function ServiceTiles() {
 
                   {/* Description */}
                   <p
-                    className={`text-xs sm:text-[13px] leading-relaxed transition-colors duration-300 line-clamp-2 ${
-                      isHovered ? "text-[#111010]/85 font-normal" : "text-muted font-light"
+                    className={`archivo-thin text-xs sm:text-[13px] leading-relaxed transition-colors duration-300 line-clamp-2 ${
+                      isHovered ? "text-[#111010]" : "text-muted"
                     }`}
                   >
                     {svc.desc}
