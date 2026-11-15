@@ -62,7 +62,7 @@ export default function ServiceTiles() {
       <div className="w-full">
         {/* Section Head */}
         <div className="flex items-center justify-between pb-6 mb-4 border-b border-hairline">
-          <h2 className="eyebrow eyebrow--accent">
+          <h2 className="font-mono text-white text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
             (What I do)
           </h2>
           <a

@@ -237,7 +237,9 @@ export default function Statement() {
         <div className="w-full flex flex-col justify-center">
           {/* Eyebrow */}
           <div className="mb-8 md:mb-12">
-            <span className="eyebrow eyebrow--accent">(Hello)</span>
+            <span className="font-mono text-white text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
+              (Hello)
+            </span>
           </div>
 
           {/* Big Pinned Statement with Letter-by-Letter Scroll Scrub */}
