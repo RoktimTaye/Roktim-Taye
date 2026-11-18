@@ -2,185 +2,243 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Expand when scrolling down past 40px
-      // Contract back when scrolling up or near the top
-      if (currentScrollY > 40 && currentScrollY > lastScrollY) {
-        setIsExpanded(true);
-      } else if (currentScrollY <= 40 || currentScrollY < lastScrollY - 5) {
-        setIsExpanded(false);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [timeStr, setTimeStr] = useState("13:30");
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: "Asia/Kolkata",
+      const formatted = now.toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      };
-      setTime(now.toLocaleTimeString("en-US", options));
+        timeZone: "Asia/Kolkata",
+      });
+      setTimeStr(formatted);
     };
-
     updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    const timer = setInterval(updateTime, 10000);
+    return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  const navItems = [
+    { label: "Home", href: "/#" },
+    { label: "Work", href: "/#work" },
+    { label: "About", href: "/#about" },
+    { label: "Services", href: "/#services" },
+    { label: "Contact", href: "/#contact" },
+  ];
 
   return (
     <>
-      {/* Floating Apple Glass Navigation Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none pt-4 sm:pt-6 px-4 sm:px-6">
-        <div
-          className={`pointer-events-auto relative w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            isExpanded
-              ? "max-w-[1300px] py-3.5 px-6 sm:px-8 bg-[#161514]/85 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_20px_50px_rgba(0,0,0,0.7)] border-white/20"
-              : "max-w-[880px] py-2.5 px-5 sm:px-7 bg-[#161514]/65 shadow-[inset_0_1px_1px_rgba(255,255,255,0.12),0_10px_35px_rgba(0,0,0,0.45)] border-white/10"
-          } backdrop-blur-2xl rounded-full border flex items-center justify-between overflow-hidden`}
+      {/* Full-width Top Navigation Bar */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full px-[clamp(20px,4vw,56px)] py-3 md:py-3.5 flex items-center justify-between bg-transparent select-none">
+        {/* Left: Brand Identity Logo Image */}
+        <Link
+          href="/"
+          onClick={() => setMobileMenuOpen(false)}
+          className="inline-flex items-center transition-opacity hover:opacity-85 z-10"
         >
-          {/* Apple Glass Highlight Sheen on Top Border */}
-          <div className="absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
+          <img
+            src="/images/roktim-taye-logo.png"
+            alt="Roktim Taye"
+            className="h-[clamp(17px,1.5vw,21px)] w-auto object-contain"
+          />
+        </Link>
 
-          {/* Left: Brand Identity */}
-          <Link
-            href="/"
-            className="group flex items-center gap-2.5 text-xs font-semibold tracking-wider uppercase text-text transition-colors"
-          >
-            <span className="w-2 h-2 rounded-full bg-accent/80 group-hover:scale-125 transition-transform duration-300" />
-            <span className="group-hover:text-accent transition-colors">ROKTIM TAYE</span>
-            <span className="hidden sm:inline text-[10px] text-label font-mono">
-              / ©2026
-            </span>
-          </Link>
+        {/* Center: Location strictly centered horizontally */}
+        <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-xs font-archivo font-medium uppercase tracking-widest text-label select-none pointer-events-none">
+          Dibrugarh, Assam
+        </div>
 
-          {/* Center: Navigation Links (hover #7FA8FF) */}
-          <nav className="hidden md:flex items-center gap-8 text-xs tracking-wider uppercase font-mono text-muted">
+        {/* Right: Nav Links & CTA Button (Desktop) */}
+        <div className="hidden md:flex items-center gap-7 lg:gap-8 z-10">
+          <nav className="flex items-center gap-6 lg:gap-8 text-xs tracking-wider uppercase font-archivo font-bold text-white">
             <a
-              href="#work"
+              href="/#work"
               className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               Work
             </a>
             <a
-              href="#about"
+              href="/#about"
               className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               About
             </a>
             <a
-              href="#services"
+              href="/#services"
               className="hover:text-[#7fa8ff] transition-colors duration-200"
             >
               Services
             </a>
           </nav>
 
-          {/* Right: Live Clock & Glass Pill CTA */}
-          <div className="hidden sm:flex items-center gap-4">
-            {/* Live Dibrugarh Clock */}
-            <div
-              className={`flex items-center gap-1.5 text-[11px] font-mono text-label px-3 py-1 rounded-full bg-white/[0.04] border border-white/5 transition-opacity duration-300 ${
-                isExpanded ? "opacity-100" : "opacity-80"
-              }`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Dibrugarh {time || "IST"}</span>
-            </div>
+          {/* Action Button: START A PROJECT */}
+          <a
+            href="/#contact"
+            className="inline-flex items-center justify-center px-5 sm:px-6 py-2.5 text-xs font-archivo uppercase tracking-wider text-[#111010] font-bold bg-[#7fa8ff] hover:bg-[#9bbaff] rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
+          >
+            Start a project
+          </a>
+        </div>
 
-            {/* Contact Action Pill (bg #7FA8FF, text #111010) */}
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-mono uppercase tracking-wider text-[#111010] font-semibold bg-[#7fa8ff] hover:bg-[#9bbaff] border border-[#7fa8ff] rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-md shadow-[#7fa8ff]/25"
-            >
-              <span>Contact</span>
-              <ArrowUpRight size={13} className="text-[#111010]" />
-            </a>
+        {/* Mobile Animated Pill Menu Button (Fixed stable size: never expands) */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden border border-white/20 hover:border-white/40 bg-black/60 backdrop-blur-md rounded-full w-[94px] h-[34px] px-3 flex items-center justify-center gap-2 transition-colors focus:outline-none z-50 select-none active:scale-95"
+          aria-label="Toggle menu"
+        >
+          {/* Animated lines that morph between '=' and '✕' */}
+          <div className="relative w-4 h-3.5 flex items-center justify-center flex-shrink-0">
+            <motion.span
+              initial={false}
+              animate={
+                mobileMenuOpen
+                  ? { rotate: 45, y: 0 }
+                  : { rotate: 0, y: -2.5 }
+              }
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute h-[1.5px] w-3.5 bg-white rounded-full"
+            />
+            <motion.span
+              initial={false}
+              animate={
+                mobileMenuOpen
+                  ? { rotate: -45, y: 0 }
+                  : { rotate: 0, y: 2.5 }
+              }
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute h-[1.5px] w-3.5 bg-white rounded-full"
+            />
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-muted hover:text-text p-1.5 rounded-full bg-white/5 border border-white/10 focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
+          {/* Fixed-width text container preventing horizontal box expansion */}
+          <div className="relative w-[44px] h-4 overflow-hidden flex items-center flex-shrink-0">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={mobileMenuOpen ? "close" : "menu"}
+                initial={{ opacity: 0, y: mobileMenuOpen ? 7 : -7 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: mobileMenuOpen ? -7 : 7 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 flex items-center text-left font-mono text-xs uppercase tracking-wider font-medium text-white"
+              >
+                {mobileMenuOpen ? "Close" : "Menu"}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </button>
       </header>
 
-      {/* Mobile Drawer (Apple Glass Style) */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#111010]/95 backdrop-blur-3xl flex flex-col justify-between p-8 md:hidden">
-          <div className="pt-24 flex flex-col gap-8 text-3xl font-light text-text">
-            <a
-              href="#work"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-accent transition-colors flex items-center justify-between"
-            >
-              <span>Work</span>
-              <ArrowUpRight size={20} className="text-label" />
-            </a>
-            <a
-              href="#about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-accent transition-colors flex items-center justify-between"
-            >
-              <span>About</span>
-              <ArrowUpRight size={20} className="text-label" />
-            </a>
-            <a
-              href="#services"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-accent transition-colors flex items-center justify-between"
-            >
-              <span>Services</span>
-              <ArrowUpRight size={20} className="text-label" />
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-accent transition-colors flex items-center justify-between"
-            >
-              <span>Contact</span>
-              <ArrowUpRight size={20} className="text-label" />
-            </a>
-          </div>
+      {/* Mobile Menu Drawer Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ y: "-100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "-100%" }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 bg-[#111010] flex flex-col justify-between px-[clamp(20px,4vw,56px)] pt-24 pb-8 md:hidden overflow-y-auto select-none"
+          >
+            {/* Animated Links List with expanding dividing lines */}
+            <div className="flex flex-col my-auto py-2">
+              {navItems.map((item, idx) => (
+                <div key={item.label} className="w-full">
+                  {/* Top hairline dividing line for each row */}
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{
+                      duration: 0.55,
+                      delay: 0.12 + 0.07 * idx,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    style={{ transformOrigin: "left" }}
+                    className="w-full h-[1px] bg-white/10"
+                  />
 
-          <div className="border-t border-hairline pt-6 flex flex-col gap-3 text-xs font-mono text-label">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>Dibrugarh, Assam, India • {time}</span>
+                  {/* Menu item row */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.45,
+                      delay: 0.15 + 0.06 * idx,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="py-4 sm:py-5 flex items-center justify-between group"
+                  >
+                    <a
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-4xl sm:text-5xl font-archivo font-extrabold tracking-tight uppercase text-white hover:text-accent transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                    <span className="font-mono text-xs text-muted tracking-widest">
+                      0{idx + 1}
+                    </span>
+                  </motion.div>
+                </div>
+              ))}
+
+              {/* Bottom hairline dividing line after last row */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.12 + 0.07 * navItems.length,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{ transformOrigin: "left" }}
+                className="w-full h-[1px] bg-white/10"
+              />
             </div>
-            <a
-              href="mailto:roktimtayecoding@gmail.com"
-              className="text-text hover:text-accent transition-colors"
-            >
-              roktimtayecoding@gmail.com
-            </a>
-          </div>
-        </div>
-      )}
+
+            {/* Bottom Drawer Meta Info & Action */}
+            <div className="pt-6 border-t border-hairline/30 flex flex-col gap-4">
+              <div className="flex flex-col gap-1 font-mono text-xs uppercase tracking-wider text-label">
+                <a
+                  href="mailto:roktimtayecoding@gmail.com"
+                  className="text-white hover:text-accent transition-colors"
+                >
+                  roktimtayecoding@gmail.com
+                </a>
+                <div className="flex items-center gap-2 text-muted">
+                  <span>Dibrugarh, Assam</span>
+                  <span>/</span>
+                  <span>{timeStr}</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <a
+                  href="/#work"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-white/20 hover:border-accent text-white hover:text-accent font-mono text-xs uppercase tracking-wider transition-colors"
+                >
+                  See the work →
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

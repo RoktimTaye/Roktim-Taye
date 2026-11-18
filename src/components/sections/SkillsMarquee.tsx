@@ -17,16 +17,19 @@ const wrap = (min: number, max: number, v: number) => {
 
 export default function SkillsMarquee() {
   const items = [
-    "Design",
-    "Build",
-    "Motion",
-    "Shopify",
-    "Webflow",
     "Next.js",
-    "Apps",
     "React",
-    "Brainstorm",
-    "Ideate",
+    "Tailwind CSS",
+    "Framer Motion",
+    "GSAP",
+    "Figma",
+    "FastAPI",
+    "Django",
+    "Spring Boot",
+    "SQL",
+    "Mongo DB",
+    "Docker",
+    "Github Actions",
   ];
 
   const baseX = useMotionValue(0);
@@ -66,18 +69,8 @@ export default function SkillsMarquee() {
   });
 
   return (
-    // Top border removed (only border-b retained), background #111010
-    <div className="w-full border-b border-hairline bg-[#111010] py-8 sm:py-10 md:py-12 overflow-hidden select-none relative">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,400;1,500&display=swap');
-
-        .archivo-italic-medium {
-          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-style: italic;
-          font-weight: 400;
-        }
-      `}</style>
-
+    // Border top and bottom with hairline line, background #111010
+    <div className="w-full border-y border-hairline bg-[#111010] py-8 sm:py-10 md:py-12 overflow-hidden select-none relative">
       {/* Marquee Track with Symmetrical Scroll Boost */}
       <motion.div
         style={{ x }}

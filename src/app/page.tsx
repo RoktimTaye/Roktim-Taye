@@ -1,7 +1,7 @@
 import Hero from "@/components/sections/Hero";
 import SkillsMarquee from "@/components/sections/SkillsMarquee";
 import SelectedWork from "@/components/sections/SelectedWork";
-import UpCloseStrip from "@/components/sections/UpCloseStrip";
+// import UpCloseStrip from "@/components/sections/UpCloseStrip";
 import Statement from "@/components/sections/Statement";
 import ServiceTiles from "@/components/sections/ServiceTiles";
 
@@ -11,7 +11,8 @@ export default function Home() {
       <Hero />
       <SkillsMarquee />
       <SelectedWork />
-      <UpCloseStrip />
+      {/* UP CLOSE section temporarily commented out - will be used later */}
+      {/* <UpCloseStrip /> */}
       <Statement />
       <ServiceTiles />
     </div>

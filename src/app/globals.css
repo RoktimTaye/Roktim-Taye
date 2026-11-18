@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -127,4 +129,55 @@ body {
   .animate-marquee {
     animation: none !important;
   }
+}
+
+/* Custom Archivo Typography Classes */
+.font-archivo {
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.archivo-light {
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.archivo-thin {
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  font-variation-settings: 'wght' 100, 'wdth' 100;
+}
+
+.archivo-italic-medium {
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.font-work-title,
+.font-service-title {
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  transform-origin: left center;
+  transition: font-variation-settings 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              font-weight 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              letter-spacing 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.35s ease;
+}
+
+/* TextPressure Stroke Styles */
+.text-pressure-title.is-stroke span {
+  position: relative;
+}
+
+.text-pressure-title.is-stroke span::after {
+  content: attr(data-char);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: transparent;
+  z-index: -1;
+  -webkit-text-stroke-width: var(--text-pressure-stroke-width);
+  -webkit-text-stroke-color: var(--text-pressure-stroke-color);
 }

@@ -53,7 +53,7 @@ export default function UpCloseStrip() {
   ];
 
   return (
-    <section className="py-[clamp(60px,10vh,120px)] bg-bg overflow-hidden border-t border-hairline">
+    <section className="py-[clamp(60px,10vh,120px)] bg-bg overflow-hidden">
       {/* Head */}
       <div className="w-full px-[clamp(20px,4vw,56px)] flex items-center justify-between mb-8">
         <span className="eyebrow eyebrow--accent">(Up close)</span>

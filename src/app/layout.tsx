@@ -47,6 +47,14 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -75,13 +83,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <head>
+      <body className="bg-[#0a0a0a] text-white min-h-screen font-sans selection:bg-[#e63946] selection:text-white">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className="bg-[#0a0a0a] text-white min-h-screen font-sans selection:bg-[#e63946] selection:text-white">
         <SmoothScroll>
           <Header />
           <main>{children}</main>

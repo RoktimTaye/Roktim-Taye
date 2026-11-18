@@ -1,37 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import TextPressure from "@/components/ui/TextPressure";
 
 export default function Footer() {
-  const [time, setTime] = useState("");
   const email = "roktimtayecoding@gmail.com";
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      };
-      setTime(now.toLocaleTimeString("en-US", options));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer id="contact" className="bg-bg text-text pt-24 sm:pt-36 pb-12 px-[clamp(20px,4vw,56px)] border-t border-hairline select-none">
+    <footer id="contact" className="bg-bg text-text pt-24 sm:pt-36 pb-12 px-[clamp(20px,4vw,56px)] select-none">
       <div className="w-full flex flex-col justify-between">
         {/* Eyebrow Label (Increased size by 2, text color white) */}
         <div className="mb-6 sm:mb-8">
@@ -40,27 +20,33 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Massive LET'S TALK Kinetic Link with TextPressure (arrow removed) */}
+        {/* Massive LET'S TALK Kinetic Link with TextPressure (arrow removed, responsive on mobile & desktop) */}
         <div className="my-8 sm:my-16 w-full">
           <a
             href={`mailto:${email}`}
             aria-label="Let's Talk - Email Roktim Taye"
-            className="group block w-full h-[clamp(90px,16vw,250px)] relative flex items-center justify-start overflow-hidden cursor-pointer"
+            className="group block w-full h-[clamp(48px,12.5vw,220px)] relative flex items-center justify-start overflow-hidden cursor-pointer"
           >
             <TextPressure
               text="LET'S TALK"
               tag="h2"
               flex={false}
-              letterSpacing="0.045em"
-              gap="0.045em"
+              fontFamily="'Archivo', -apple-system, BlinkMacSystemFont, sans-serif"
+              fontUrl=""
+              letterSpacing="0.035em"
+              gap="0.035em"
               weight={true}
               width={true}
-              italic={true}
-              radius={0.25}
+              italic={false}
+              minWeight={700}
+              maxWeight={500}
+              minWidth={94}
+              maxWidth={122}
+              radius={0.28}
               smoothing={0.35}
               textColor="#edeae4"
               pressureColor="#7fa8ff"
-              minFontSize={44}
+              minFontSize={24}
               className="cursor-pointer"
             />
           </a>
@@ -96,10 +82,9 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* Location & Time */}
+          {/* Location */}
           <div className="flex items-center gap-2 text-muted">
-            <span>Dibrugarh</span>
-            <span className="text-label">{time || "IST"}</span>
+            <span>Dibrugarh, Assam, India</span>
           </div>
 
           {/* Back to Top (uppercase, hover #7FA8FF) */}

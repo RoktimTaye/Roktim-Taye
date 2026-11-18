@@ -44,18 +44,6 @@ const MAIN_WORDS: WordData[] = [
   { text: "Dibrugarh.", accent: true },
 ];
 
-const SUBTITLE_WORDS: WordData[] = [
-  { text: "Brainstorming" },
-  { text: "•" },
-  { text: "Shaping" },
-  { text: "•" },
-  { text: "Presenting" },
-  { text: "to" },
-  { text: "the" },
-  { text: "real" },
-  { text: "world" },
-];
-
 interface CharItem {
   char: string;
   range: [number, number];
@@ -147,7 +135,7 @@ export default function Statement() {
     offset: ["start start", "end end"],
   });
 
-  const { processedMainWords, processedSubtitleWords } = useMemo(() => {
+  const processedMainWords = useMemo(() => {
     // 1. Calculate total chars in main words
     let totalMainChars = 0;
     MAIN_WORDS.forEach((w) => {
@@ -155,11 +143,11 @@ export default function Statement() {
     });
 
     const mainStart = 0.05;
-    const mainEnd = 0.72;
+    const mainEnd = 0.85;
     const mainStep = (mainEnd - mainStart) / totalMainChars;
 
     let globalMainIdx = 0;
-    const processedMain: ProcessedWord[] = MAIN_WORDS.map((w) => {
+    return MAIN_WORDS.map((w) => {
       const chars: CharItem[] = [];
       const wordStartIdx = globalMainIdx;
 
@@ -179,59 +167,16 @@ export default function Statement() {
       return {
         ...w,
         chars,
-        wordRange: [wordStart, Math.min(1, wordEnd)],
+        wordRange: [wordStart, Math.min(1, wordEnd)] as [number, number],
       };
     });
-
-    // 2. Calculate total chars in subtitle words
-    let totalSubChars = 0;
-    SUBTITLE_WORDS.forEach((w) => {
-      totalSubChars += w.text.length;
-    });
-
-    const subStart = 0.76;
-    const subEnd = 0.92;
-    const subStep = (subEnd - subStart) / totalSubChars;
-
-    let globalSubIdx = 0;
-    const processedSub: ProcessedWord[] = SUBTITLE_WORDS.map((w) => {
-      const chars: CharItem[] = [];
-      const wordStartIdx = globalSubIdx;
-
-      for (let i = 0; i < w.text.length; i++) {
-        const start = subStart + globalSubIdx * subStep;
-        const end = Math.min(subEnd + subStep, start + subStep * 2.2);
-        chars.push({
-          char: w.text[i],
-          range: [start, end],
-        });
-        globalSubIdx++;
-      }
-
-      const wordStart = subStart + wordStartIdx * subStep;
-      const wordEnd = subStart + (globalSubIdx - 1) * subStep + subStep * 2.2;
-
-      return {
-        ...w,
-        chars,
-        wordRange: [wordStart, Math.min(1, wordEnd)],
-      };
-    });
-
-    return {
-      processedMainWords: processedMain,
-      processedSubtitleWords: processedSub,
-    };
   }, []);
-
-  const dividerOpacity = useTransform(scrollYProgress, [0.68, 0.76], [0.2, 1]);
-  const locationOpacity = useTransform(scrollYProgress, [0.82, 0.92], [0.2, 1]);
 
   return (
     <section
       id="about"
       ref={containerRef}
-      className="relative h-[220vh] bg-bg border-t border-hairline"
+      className="relative h-[200vh] bg-bg"
     >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center px-[clamp(20px,4vw,56px)] overflow-hidden">
         <div className="w-full flex flex-col justify-center">
@@ -253,30 +198,6 @@ export default function Statement() {
               />
             ))}
           </h2>
-
-          {/* Small subtitle detail */}
-          <motion.div
-            style={isReduced ? undefined : { opacity: dividerOpacity }}
-            className="mt-12 pt-8 border-t border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-mono uppercase"
-          >
-            <div className="flex flex-wrap gap-x-[0.35em] text-label">
-              {processedSubtitleWords.map((word, idx) => (
-                <Word
-                  key={idx}
-                  word={word}
-                  progress={scrollYProgress}
-                  isReduced={isReduced}
-                />
-              ))}
-            </div>
-
-            <motion.div
-              style={isReduced ? undefined : { opacity: locationOpacity }}
-              className="text-label"
-            >
-              Assam, India
-            </motion.div>
-          </motion.div>
         </div>
       </div>
     </section>

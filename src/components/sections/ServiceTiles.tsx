@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
+import TextPressure from "@/components/ui/TextPressure";
 
 interface ServiceItem {
   num: string;
@@ -12,23 +13,33 @@ interface ServiceItem {
 const services: ServiceItem[] = [
   {
     num: "01",
-    title: "Websites",
+    title: "Portfolio Website",
     desc: "Marketing sites and portfolios, designed and built with motion baked in.",
   },
   {
     num: "02",
-    title: "Shopify",
-    desc: "Custom Shopify themes built around your brand and products.",
+    title: "Landing Pages",
+    desc: "High-converting, performance-focused pages designed to turn visitors into users.",
   },
   {
     num: "03",
-    title: "Webflow",
-    desc: "Webflow builds your team can edit on their own.",
+    title: "Business Websites",
+    desc: "Modern digital homes tailored for brands, startups, and companies.",
   },
   {
     num: "04",
-    title: "Apps",
-    desc: "Mobile app UI / UX development, from early flows to launch.",
+    title: "Full Stack Web Applications",
+    desc: "End-to-end web apps built with modern frameworks and clean architecture.",
+  },
+  {
+    num: "05",
+    title: "SaaS Development",
+    desc: "Scalable software products with auth, payments, and subscription flows.",
+  },
+  {
+    num: "06",
+    title: "API & Backend Development",
+    desc: "Fast, secure RESTful & GraphQL APIs, microservices, and databases.",
   },
 ];
 
@@ -38,18 +49,22 @@ export default function ServiceTiles() {
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Magnetic cursor follower for the "OPEN" circular badge
-  const badgeX = useSpring(0, { damping: 24, stiffness: 220, mass: 0.5 });
-  const badgeY = useSpring(0, { damping: 24, stiffness: 220, mass: 0.5 });
+  const badgeX = useSpring(0, { damping: 28, stiffness: 280, mass: 0.3 });
+  const badgeY = useSpring(0, { damping: 28, stiffness: 280, mass: 0.3 });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!gridRef.current) return;
-    const rect = gridRef.current.getBoundingClientRect();
-    badgeX.set(e.clientX - rect.left);
-    badgeY.set(e.clientY - rect.top);
+  const handleMouseEnterGrid = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    badgeX.jump(x);
+    badgeY.jump(y);
+    setIsInsideGrid(true);
   };
 
-  const handleMouseEnterGrid = () => {
-    setIsInsideGrid(true);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    badgeX.set(e.clientX - rect.left);
+    badgeY.set(e.clientY - rect.top);
   };
 
   const handleMouseLeaveGrid = () => {
@@ -58,35 +73,15 @@ export default function ServiceTiles() {
   };
 
   return (
-    <section id="services" className="py-[clamp(50px,8vh,90px)] px-[clamp(20px,4vw,56px)] bg-bg border-t border-hairline select-none">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap');
-
-        .font-service-title {
-          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          transform-origin: left center;
-          transition: font-variation-settings 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                      font-weight 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                      letter-spacing 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                      color 0.35s ease;
-        }
-
-        .archivo-thin {
-          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 100;
-          font-style: normal;
-          font-variation-settings: 'wght' 100, 'wdth' 100;
-        }
-      `}</style>
+    <section id="services" className="py-[clamp(50px,8vh,90px)] px-[clamp(20px,4vw,56px)] bg-bg select-none">
       <div className="w-full">
         {/* Section Head */}
-        <div className="flex items-center justify-between pb-6 mb-4 border-b border-hairline">
+        <div className="flex items-center justify-between pb-6 mb-4">
           <h2 className="font-mono text-white text-[clamp(16px,1.4vw,22px)] tracking-wider uppercase font-medium">
             (What I do)
           </h2>
           <a
-            href="#contact"
+            href="/#contact"
             className="eyebrow text-muted hover:text-accent transition-colors flex items-center gap-1.5"
           >
             <span>Start a project</span>
@@ -94,27 +89,27 @@ export default function ServiceTiles() {
           </a>
         </div>
 
-        {/* 4-Column Low-Height Wide Rectangle Grid with vertically centered text */}
+        {/* Low-Height Wide Rectangle Grid with vertically centered text */}
         <div
           ref={gridRef}
           onMouseMove={handleMouseMove}
           onMouseEnter={handleMouseEnterGrid}
           onMouseLeave={handleMouseLeaveGrid}
-          className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-hairline divide-y sm:divide-y-0 divide-x-0 sm:divide-x divide-hairline overflow-hidden cursor-default"
+          className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-hairline bg-hairline gap-[1px] overflow-hidden cursor-default md:cursor-none [&_*]:md:cursor-none"
         >
           {/* Floating Magnetic "OPEN" Circle Badge */}
           <motion.div
-            className="pointer-events-none absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#111010] border border-white/20 shadow-2xl flex items-center justify-center z-30"
+            className="pointer-events-none hidden md:flex absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#111010] border border-white/20 shadow-2xl items-center justify-center z-30"
             style={{
               x: badgeX,
               y: badgeY,
             }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{
-              scale: isInsideGrid && hoveredIdx !== null ? 1 : 0,
-              opacity: isInsideGrid && hoveredIdx !== null ? 1 : 0,
+              scale: isInsideGrid ? 1 : 0,
+              opacity: isInsideGrid ? 1 : 0,
             }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="text-[10px] font-mono tracking-widest text-white uppercase font-medium">
               OPEN
@@ -127,9 +122,9 @@ export default function ServiceTiles() {
             return (
               <a
                 key={svc.num}
-                href="#contact"
+                href="/#contact"
                 onMouseEnter={() => setHoveredIdx(idx)}
-                className="group relative flex flex-col justify-center h-[clamp(200px,22vw,240px)] px-7 sm:px-9 py-6 overflow-hidden cursor-pointer"
+                className="group relative flex flex-col justify-center bg-bg min-h-[clamp(190px,18vw,230px)] px-7 sm:px-9 py-6 overflow-hidden cursor-default md:cursor-none"
               >
                 {/* Sliding Blue Fill Layer (slides IN from bottom, slides OUT to top) */}
                 <AnimatePresence>
@@ -171,22 +166,31 @@ export default function ServiceTiles() {
                     </span>
                   </div>
 
-                  {/* Title with exact Selected Work font transformation animation */}
-                  <h3
-                    className={`font-service-title text-2xl sm:text-3xl lg:text-[2.1rem] leading-tight mb-2 ${
-                      isHovered ? "text-[#111010]" : "text-text"
-                    }`}
-                    style={{
-                      fontWeight: isHovered ? 500 : 700,
-                      fontVariationSettings: isHovered
-                        ? "'wdth' 116, 'wght' 500"
-                        : "'wdth' 94, 'wght' 700",
-                      letterSpacing: isHovered ? "0.03em" : "-0.015em",
-                      transform: isHovered ? "scale(1.025)" : "scale(1)",
-                    }}
-                  >
-                    {svc.title}
-                  </h3>
+                  {/* Title with React Bits TextPressure component - Uniform consistent font size across all boxes */}
+                  <div className="w-full h-[22px] xs:h-[24px] sm:h-[26px] md:h-[30px] lg:h-[34px] xl:h-[38px] flex items-center justify-start mb-2 overflow-visible">
+                    <TextPressure
+                      text={svc.title}
+                      tag="h3"
+                      flex={false}
+                      align="left"
+                      fontFamily="'Archivo', -apple-system, BlinkMacSystemFont, sans-serif"
+                      fontUrl=""
+                      width={true}
+                      weight={true}
+                      italic={false}
+                      minWeight={700}
+                      maxWeight={500}
+                      minWidth={94}
+                      maxWidth={122}
+                      radius={0.4}
+                      smoothing={0.4}
+                      clickRipple={true}
+                      textColor={isHovered ? "#111010" : "#edeae4"}
+                      pressureColor={isHovered ? "#111010" : "#7fa8ff"}
+                      minFontSize={14}
+                      className="cursor-default md:cursor-none"
+                    />
+                  </div>
 
                   {/* Description */}
                   <p

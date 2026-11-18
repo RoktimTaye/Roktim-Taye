@@ -1,52 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import TextPressure from "@/components/ui/TextPressure";
+import ParticleText from "@/components/ui/ParticleText";
+import HalftoneReveal from "@/components/ui/HalftoneReveal";
+
+const HERO_INK_COLOR: [number, number, number] = [0.93, 0.92, 0.89];
 
 export default function Hero() {
   return (
-    <section className="relative box-border flex flex-col justify-between min-h-[100svh] pt-[clamp(110px,15vh,160px)] px-[clamp(20px,4vw,56px)] pb-10 bg-bg select-none overflow-hidden">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;700;800;900&display=swap');
-
-        .archivo-light {
-          font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
-          font-weight: 300;
-          font-style: normal;
-        }
-      `}</style>
-
-      {/* Background Image Layer (z-0: in front of bg color, behind text z-10) */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Fullcover Photo - High Fidelity */}
-        <img
-          src="/images/hero-bg.jpg"
-          alt="Roktim Taye"
-          className="w-full h-full object-cover object-[center_38%] opacity-70 md:opacity-80 contrast-[1.05]"
+    <section className="relative box-border flex flex-col justify-between min-h-[100svh] pt-[clamp(80px,12vh,150px)] px-[clamp(20px,4vw,56px)] pb-8 sm:pb-10 bg-bg select-none overflow-hidden">
+      {/* Background Image Layer with React Bits Halftone Reveal Effect */}
+      <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center pointer-events-auto">
+        <HalftoneReveal
+          imageSrc="/images/hero-roktim.png"
+          dotSize={9.0}
+          revealRadius={210.0}
+          inkColor={HERO_INK_COLOR}
+          className="w-full h-full"
         />
 
-        {/* Radial Vignette to darken corners and blend edges seamlessly */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 45%, transparent 35%, rgba(17,16,16,0.5) 68%, #111010 92%)",
-          }}
-        />
-
-        {/* Top Edge Blend into Header */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#111010] via-[#111010]/75 to-transparent pointer-events-none" />
-
-        {/* Bottom Edge Blend into Divider & Content */}
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#111010] via-[#111010]/85 to-transparent pointer-events-none" />
+        {/* Bottom subtle blend into divider & content */}
+        <div className="absolute inset-x-0 bottom-0 h-28 sm:h-32 bg-gradient-to-t from-[#111010] via-[#111010]/80 to-transparent pointer-events-none" />
 
         {/* Left & Right Edge Blends */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#111010] to-transparent pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#111010] to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-12 sm:w-16 bg-gradient-to-r from-[#111010] to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 sm:w-16 bg-gradient-to-l from-[#111010] to-transparent pointer-events-none" />
       </div>
 
       {/* Top Eyebrow Metadata Grid (relative z-10) */}
-      <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 gap-3 items-center eyebrow text-[11px] pb-4">
+      <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 gap-3 items-center text-xs font-archivo uppercase tracking-widest pb-4">
         <span className="justify-self-start text-label">
           (Portfolio / ©2026)
         </span>
@@ -58,41 +40,31 @@ export default function Hero() {
         </span>
       </div>
 
-      {/* Hero Name Container with Letter Gap & Balanced Proportions (relative z-10) */}
-      <div className="relative z-10 flex flex-col justify-center flex-auto my-[clamp(16px,2.5vh,36px)]">
+      {/* Hero Name Container with Letter Gap & Balanced Proportions (relative z-10, main middle section) */}
+      <div className="relative z-10 flex flex-col justify-center flex-auto my-auto py-2 sm:py-6">
         {/* Line 1: ROKTIM (Spaced wordmark, scaled) */}
-        <div className="w-full h-[clamp(85px,14.5vw,205px)] relative flex items-center justify-start overflow-hidden">
-          <TextPressure
+        <div className="w-full h-[clamp(56px,13vw,200px)] relative flex items-center justify-start overflow-hidden">
+          <ParticleText
             text="ROKTIM"
-            flex={false}
-            letterSpacing="0.045em"
-            gap="0.045em"
-            weight={true}
-            width={true}
-            italic={true}
-            radius={0.25}
-            smoothing={0.35}
-            textColor="#edeae4"
-            pressureColor="#7fa8ff"
-            minFontSize={48}
+            align="left"
+            color="#edeae4"
+            highlightColor="#7fa8ff"
+            particleSize={2.6}
+            particleGap={4}
+            mouseRadius={110}
           />
         </div>
 
         {/* Line 2: TAYE (Right-Aligned, spaced wordmark, scaled) */}
-        <div className="w-full h-[clamp(85px,14.5vw,205px)] relative flex items-center justify-end mt-2 sm:mt-4 overflow-hidden">
-          <TextPressure
+        <div className="w-full h-[clamp(56px,13vw,200px)] relative flex items-center justify-end mt-1 sm:mt-4 overflow-hidden">
+          <ParticleText
             text="TAYE"
-            flex={false}
-            letterSpacing="0.045em"
-            gap="0.045em"
-            weight={true}
-            width={true}
-            italic={true}
-            radius={0.25}
-            smoothing={0.35}
-            textColor="#edeae4"
-            pressureColor="#7fa8ff"
-            minFontSize={48}
+            align="right"
+            color="#edeae4"
+            highlightColor="#7fa8ff"
+            particleSize={2.6}
+            particleGap={4}
+            mouseRadius={110}
           />
         </div>
       </div>
@@ -102,11 +74,11 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-6 pt-6"
+        className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-end gap-5 pt-4 sm:pt-6"
       >
         {/* Intro in Archivo Light 300 Regular */}
-        <p className="archivo-light max-w-[38ch] text-[clamp(17px,1.6vw,22px)] text-text leading-[1.4] m-0 tracking-wide">
-          I design &amp; Build ideas into working stuff that you want to bring to the real world
+        <p className="archivo-light max-w-[38ch] text-[clamp(15px,1.5vw,22px)] text-text leading-[1.4] m-0 tracking-wide">
+          I design {"&"} Build ideas into working stuff that you want to bring to the real world
         </p>
 
         {/* Scroll gently indicator */}
@@ -117,7 +89,7 @@ export default function Hero() {
         {/* Button */}
         <div className="flex md:justify-end">
           <a
-            href="#work"
+            href="/#work"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-hairline hover:border-accent text-xs font-mono tracking-wider uppercase text-text hover:text-accent hover:bg-surface transition-all duration-300"
           >
             <span>See the work</span>
